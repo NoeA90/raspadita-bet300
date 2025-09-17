@@ -1,283 +1,192 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-  <title>BET300 · Rasca y Gana (3 opciones)</title>
-  <style>
-    :root{
-      --bg:#0b0b0e; --panel:#14141a; --panel2:#101016; --border:#23232c;
-      --text:#f5f7fb; --muted:#8e90a0; --ok:#25D366; --gold:#ffd76a; --gold-2:#ffb400;
-      --pillA: rgba(255,212,96,.15); --pillB: rgba(124,77,255,.15);
-    }
-    *{box-sizing:border-box;margin:0;padding:0}
-    body{
-      color:var(--text);background:
-        radial-gradient(1200px 800px at 50% -200px, rgba(255,212,96,.12), transparent 60%),
-        radial-gradient(800px 500px at 100% -100px, rgba(120,90,255,.10), transparent 60%),
-        var(--bg);
-      font:15px/1.42 system-ui,-apple-system,Segoe UI,Roboto;
-    }
-    .muted{color:var(--muted)}
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>BET300 · Rasca y Gana</title>
+<meta name="theme-color" content="#0b0f1e"/>
+<style>
+:root{
+  --bg:#0b0f1e; --panel:#121634; --panel2:#0f1330; --border:#1e2150;
+  --text:#e8ebff; --muted:#b7b9d6; --ok:#25D366; --pointer:#22d3ee;
+  --shadow:0 12px 28px rgba(0,0,0,.45);
+}
+*{box-sizing:border-box} html,body{height:100%}
+body{margin:0;color:var(--text);background:var(--bg);font:16px/1.35 system-ui,-apple-system,Segoe UI,Roboto}
+body::before{content:"";position:fixed;inset:0;z-index:-2;background:
+  radial-gradient(900px 500px at 50% -10%, rgba(255,215,106,.25), transparent),
+  radial-gradient(700px 350px at 100% 0%, rgba(124,77,255,.18), transparent),
+  linear-gradient(180deg,#0b0f1e 0%,#0b0f1e 60%,#0a0d20 100%);
+}
+.container{max-width:980px;margin:10px auto;padding:0 10px 84px}
+@media(max-width:420px){.container{padding:0 8px 78px;margin:6px auto}}
+.card{background:linear-gradient(180deg, rgba(255, 215, 106, .06), rgba(0,0,0,0)), var(--panel2);
+  border:1px solid var(--border);border-radius:16px;padding:16px;box-shadow:var(--shadow)}
+@media(max-width:420px){.card{border-radius:12px;padding:12px}}
 
-    /* ===== Layout compacto priorizando móviles ===== */
-    .container{max-width:720px;margin:10px auto;padding:0 10px 84px}
-    @media(max-width:420px){.container{padding:0 8px 78px;margin:6px auto}}
+.head{display:flex;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap}
+.brand{height:28px;width:auto;filter:drop-shadow(0 2px 8px rgba(0,0,0,.4))}
+.pill{background:linear-gradient(90deg,rgba(255,212,96,.15),rgba(124,77,255,.15));border:1px solid var(--border);
+  border-radius:999px;padding:6px 10px;font-size:12px;color:var(--muted)}
+@media(max-width:420px){.pill{padding:4px 8px;font-size:11px}}
+.pill.time{display:flex;gap:8px;align-items:center}
+.pill.sound{cursor:pointer;user-select:none}
+.count{display:inline-flex;gap:6px;align-items:center;padding:4px 8px;border-radius:999px;background:rgba(255,204,0,.15);
+  border:1px solid rgba(255,204,0,.35);color:#ffe27a;font-weight:700;font-variant-numeric:tabular-nums}
 
-    .card{background:linear-gradient(180deg, rgba(255, 215, 106, .06), rgba(0,0,0,0)), var(--panel2);
-      border:1px solid var(--border);border-radius:16px;padding:16px;box-shadow:0 10px 26px rgba(0,0,0,.40)}
-    @media(max-width:420px){.card{border-radius:12px;padding:12px}}
+.grid{display:grid;gap:16px;grid-template-columns:1.1fr .9fr}
+@media(max-width:900px){.grid{grid-template-columns:1fr;gap:12px}}
+@media(max-width:420px){.grid{gap:10px}}
 
-    .head{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:12px;font-size:12px}
-    .brand{font-weight:800;font-size:18px;letter-spacing:.3px}
-    .pill{padding:6px 10px;border-radius:999px;border:1px solid var(--border);background:linear-gradient(90deg,var(--pillA),var(--pillB));color:var(--muted)}
-    .pill.time{color:#ffe27a}
-    .count{font-weight:800;color:#ffe27a}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:14px}
+@media(max-width:420px){.panel{border-radius:12px;padding:12px}}
+.center{text-align:center}
+h1,h2,h3,p{margin:0 0 8px} h1{font-size:24px} .muted{color:var(--muted)}
 
-    .grid{display:grid;gap:14px;grid-template-columns:1.1fr .9fr}
-    @media(max-width:900px){.grid{grid-template-columns:1fr;gap:12px}}
-    @media(max-width:420px){.grid{gap:10px}}
+/* === Zona de raspaditas (4 tarjetas) === */
+.scratch-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+@media(max-width:900px){.scratch-grid{grid-template-columns:repeat(2,1fr);gap:10px}}
+@media(max-width:420px){.scratch-grid{grid-template-columns:repeat(2,1fr);gap:8px}}
 
-    .panel{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:14px}
-    @media(max-width:420px){.panel{border-radius:12px;padding:12px}}
+.ticket{position:relative;border-radius:16px;overflow:hidden;border:2px solid gold;
+  background:linear-gradient(135deg,#ffed85,#ff9a3d);box-shadow:var(--shadow);
+  aspect-ratio: 1/1; min-height: 160px;}
+@media(max-width:820px){.ticket{min-height:140px}}
+@media(max-width:420px){.ticket{min-height:120px}}
+.ticket canvas{width:100%;height:100%;display:block}
 
-    /* ===== Raspaditas ===== */
-    .scratch-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-    @media(max-width:900px){.scratch-grid{grid-template-columns:repeat(2,1fr);gap:10px}}
-    @media(max-width:420px){.scratch-grid{grid-template-columns:repeat(2,1fr);gap:8px}}
+/* Modal de premio */
+.modal{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.6);z-index:100;}
+.modal .box{background:linear-gradient(180deg,#102030,#0b0f1e);border-radius:16px;padding:20px;max-width:400px;width:92%;color:#fff;box-shadow:0 10px 30px rgba(0,0,0,.6)}
+.modal h2{margin:0 0 10px;font-size:20px;display:flex;align-items:center;gap:6px}
+.modal .prize{font-size:22px;font-weight:800;background:linear-gradient(90deg,#ffd166,#ff7a3d);color:#0b0f1e;padding:4px 10px;border-radius:8px}
+.modal .actions{display:flex;gap:10px;margin-top:14px}
+.modal .actions a{flex:1;text-align:center;padding:12px 14px;border-radius:10px;font-weight:700;color:#0b0f1e;text-decoration:none}
+.modal .whatsapp{background:#25D366;color:#0b0f1e}
+.modal .enter{background:linear-gradient(90deg,#6c59ff,#00d1ff);color:#0b0f1e}
+.modal .close{position:absolute;top:12px;right:12px;cursor:pointer}
 
-    .ticket{position:relative;border-radius:14px;overflow:hidden;border:1px solid var(--border);
-      background:linear-gradient(180deg, rgba(255, 215, 106, .08), rgba(0,0,0,0)), var(--panel2);
-      aspect-ratio: 16 / 11; min-height: 210px;
-    }
-    @media(max-width:820px){ .ticket{ aspect-ratio: 1 / 1; min-height: 180px; } }
-    @media(max-width:420px){ .ticket{ aspect-ratio: 1 / 1; min-height: 160px; } }
-
-    .ticket .top{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;text-align:center;padding:12px}
-    .ticket h3{font-size:clamp(16px,3.8vw,20px);text-shadow:0 2px 24px rgba(255,215,106,.28)}
-    .ticket small{color:var(--muted);font-size:12px}
-    .hint{position:absolute;top:10px;right:10px;font-size:18px;opacity:.75}
-
-    .ticket canvas{position:absolute;inset:0;width:100%;height:100%;
-      background:
-        radial-gradient(200px 120px at 10% -20%, rgba(255,255,255,.2), transparent 60%),
-        repeating-linear-gradient(45deg,#c4c7cf 0px,#c4c7cf 8px,#b7bac2 8px,#b7bac2 16px);
-      box-shadow: inset 0 0 32px rgba(0,0,0,.35);cursor:crosshair}
-    .ticket.disabled canvas{pointer-events:none;filter:grayscale(1);opacity:.55}
-    .ticket.won{outline:2px solid var(--gold)}
-
-    /* ===== Panel derecho ===== */
-    .stat{text-align:center;margin-bottom:10px}
-    .badge{display:inline-block;min-width:76px;padding:8px 10px;border-radius:10px;background:rgba(124,77,255,.25);font-weight:800}
-    .smallline{font-size:11px;color:var(--muted)}
-
-    .promo{margin-top:10px;padding:12px;border:1px dashed var(--border);border-radius:12px;display:grid;gap:6px;align-items:center}
-    .btn.play{display:inline-block;justify-self:center;margin-top:4px;padding:12px 16px;border-radius:12px;font-weight:800;background:linear-gradient(90deg,#ffd166,#ff7ab6);color:#0a0f20;text-decoration:none}
-
-    /* ===== Dock inferior ===== */
-    .dock{position:fixed;left:0;right:0;bottom:0;z-index:10;background:linear-gradient(180deg, rgba(11,15,30,0) 0%, rgba(11,15,30,.85) 22%, rgba(11,15,30,.95) 100%);
-      padding:8px 12px 12px;display:flex;gap:10px;align-items:center}
-    @media(max-width:420px){.dock{padding:8px 10px 10px;gap:8px}}
-    .btn{flex:1;appearance:none;border:none;cursor:pointer;padding:12px 14px;border-radius:12px;font-weight:800;color:#0a0f20;background:linear-gradient(90deg,#6c59ff,#00d1ff);box-shadow:0 8px 20px rgba(0,0,0,.35)}
-    .btn.ok{background:#25D366;color:#0b0f1e}
-    .btn:disabled{opacity:.6;cursor:not-allowed}
-
-    /* Confetti */
-    .confetti{position:fixed;inset:0;pointer-events:none;z-index:40}
-    .confetti i{position:absolute;top:-20px;width:8px;height:10px;border-radius:2px;opacity:0;animation:confFall 1.4s linear forwards}
-    @keyframes confFall{8%{opacity:1}100%{transform:translateY(110vh) rotate(360deg);opacity:0}}
-  </style>
+.dock{position:fixed;left:0;right:0;bottom:0;z-index:10;background:linear-gradient(180deg, rgba(11,15,30,0) 0%, rgba(11,15,30,.85) 22%, rgba(11,15,30,.95) 100%);
+  padding:8px 12px 12px;display:flex;gap:10px;align-items:center}
+@media(max-width:420px){.dock{padding:8px 10px 10px;gap:8px}}
+.btn{appearance:none;border:none;cursor:pointer;padding:12px 14px;border-radius:12px;font-weight:800;background:linear-gradient(90deg,#6c59ff,#00d1ff);color:#0a0f20;width:100%;
+  box-shadow:0 8px 20px rgba(0,0,0,.35)}
+@media(max-width:420px){.btn{padding:11px 12px;border-radius:10px}}
+.btn.ok{background:#25D366;color:#0b0f1e}
+</style>
 </head>
 <body>
-<div id="confetti" class="confetti" aria-hidden="true"></div>
-
 <div class="container">
   <div class="card">
     <div class="head">
-      <div class="brand">BET300</div>
+      <img class="brand" src="img/logo-bet300.svg" alt="BET300" onerror="this.outerHTML='<strong>BET300</strong>'">
       <span class="pill">Promo interactiva</span>
-      <span class="pill time">⚡ Tiempo limitado <b class="count" id="countdown">--:--</b></span>
-      <span class="pill" id="soundToggle">🔊 Sonido: <b id="soundState">ON</b></span>
+      <span class="pill time">⚡ Tiempo limitado <span class="count" id="countdown">--:--</span></span>
+      <span class="pill sound" id="soundToggle">🔊 Sonido: <b id="soundState">ON</b></span>
     </div>
 
     <div class="grid">
-      <!-- IZQ: 3 raspaditas -->
       <div class="panel">
-        <div class="scratch-grid" id="scratchGrid">
-          <div class="ticket" data-idx="0">
-            <div class="top"><span class="hint">🪄</span><small>Raspá para revelar</small><h3 id="p0">—</h3><small>Con tu próxima carga mínima</small></div>
-            <canvas id="c0" aria-label="Raspadita 1"></canvas>
-          </div>
-          <div class="ticket" data-idx="1">
-            <div class="top"><span class="hint">🪄</span><small>Raspá para revelar</small><h3 id="p1">—</h3><small>Con tu próxima carga mínima</small></div>
-            <canvas id="c1" aria-label="Raspadita 2"></canvas>
-          </div>
-          <div class="ticket" data-idx="2">
-            <div class="top"><span class="hint">🪄</span><small>Raspá para revelar</small><h3 id="p2">—</h3><small>Con tu próxima carga mínima</small></div>
-            <canvas id="c2" aria-label="Raspadita 3"></canvas>
-          </div>
+        <p>Tenés 1 raspe disponible para elegir <b>una</b> tarjeta.</p>
+        <div class="scratch-grid">
+          <div class="ticket"><canvas></canvas></div>
+          <div class="ticket"><canvas></canvas></div>
+          <div class="ticket"><canvas></canvas></div>
+          <div class="ticket"><canvas></canvas></div>
         </div>
-        <p class="muted" style="margin-top:8px">Tenés <b id="triesLeft">1</b> raspe disponible para elegir <b>una</b> tarjeta.</p>
       </div>
-
-      <!-- DER: info + CTAs -->
       <div class="panel">
-        <div class="stat">
-          <div class="badge" id="badge">-</div>
-          <div class="smallline" id="stampLine" aria-live="polite"></div>
-          <h1 id="title" style="font-size:20px;margin-top:6px">Rasca y Gana · 3 opciones</h1>
-          <p id="subtitle" class="muted" style="font-size:13px">Los premios se acreditan con tu <b>próxima carga mínima</b>.</p>
+        <div class="center">
+          <h2>Rasca y Gana · 4 opciones</h2>
+          <p class="muted">Los premios se acreditan con tu <b>próxima carga mínima</b>.</p>
         </div>
         <div class="promo" id="promoBox">
           <div class="copy">
-            <span class="muted" style="font-weight:700">Acceso especial</span>
+            <span class="eyebrow">Acceso especial</span>
             <strong>Tiempo limitado.</strong>
             <span class="muted">Entrá y participá antes de que termine.</span>
           </div>
-          <a id="playNow" class="btn play" target="_blank" rel="noopener">Entrar a la plataforma</a>
+          <a id="playNow" class="btn play" target="_blank" rel="noopener">🎮 Entrar a la plataforma</a>
         </div>
       </div>
     </div>
   </div>
 </div>
-
-<!-- Dock fijo -->
-<div class="dock">
-  <button id="claimBtn" class="btn ok" disabled>📲 Reclamar</button>
+<div id="prizeModal" class="modal" style="display:none">
+  <div class="box">
+    <div class="close" onclick="closeModal()">✖</div>
+    <h2>🎉 ¡Premio obtenido! <span id="prizeValue" class="prize"></span></h2>
+    <p id="prizeText"></p>
+    <p class="muted" id="prizeCode"></p>
+    <div class="actions">
+      <a id="claimBtn" class="whatsapp" target="_blank">📲 Reclamar por WhatsApp</a>
+      <a id="enterBtn" class="enter" target="_blank">🎮 Entrar</a>
+    </div>
+  </div>
 </div>
-
 <script>
-/**************** CONFIG ****************/
-const CONFIG = {
-  whatsappLinkByPC: { principal: "5491157737173", pc1:"5491138601132", pc2:"5491138214312", pc3:"5491166306349" }, // wa.me
-  plataformaByPC:   { principal: "https://plataforma.example/inicio", pc1:"https://c01.bet300vip.com/", pc2:"https://c02.bet300vip.com/", pc3:"https://c03.bet300vip.com/" },
-  scratchThreshold: .55,                  // % raspado para validar
-  allowOnePlayPerDay: true,
-  countdownToEndOfDay: true,
-  prizesPool: [                            // ajustar pesos/labels a gusto
-    { label: "Fichas +$10.000", note:"Válido con tu próxima carga", weight: 3 },
-    { label: "Fichas +$7.000",  note:"Válido con tu próxima carga", weight: 6 },
-    { label: "Fichas +$5.000",  note:"Válido con tu próxima carga", weight: 10 },
-    { label: "Tirada de Ruleta", note:"Válida al cargar", weight: 8 },
-    { label: "Upgrade de Bono", note:"Mejoramos tu beneficio al cargar", weight: 5 },
-  ]
-};
-
-/**************** STATE ****************/
-let soundOn = true; const soundToggle=document.getElementById('soundToggle'); const soundState=document.getElementById('soundState');
-const triesLeftEl = document.getElementById('triesLeft');
-const claimBtn = document.getElementById('claimBtn');
-const badge=document.getElementById('badge'), title=document.getElementById('title'), subtitle=document.getElementById('subtitle');
-const stampEl=document.getElementById('stampLine'); const countdownEl=document.getElementById('countdown'); const confetti = document.getElementById('confetti');
-
-const params=new URLSearchParams(location.search);const pc=params.get('pc');
-let WA = CONFIG.whatsappLinkByPC.principal, PLATFORM = CONFIG.plataformaByPC.principal;
-if(pc==='1'){WA=CONFIG.whatsappLinkByPC.pc1;PLATFORM=CONFIG.plataformaByPC.pc1}
-if(pc==='2'){WA=CONFIG.whatsappLinkByPC.pc2;PLATFORM=CONFIG.plataformaByPC.pc2}
-if(pc==='3'){WA=CONFIG.whatsappLinkByPC.pc3;PLATFORM=CONFIG.plataformaByPC.pc3}
-const playNow=document.getElementById('playNow'); playNow.href=PLATFORM;
-
-/**************** STORAGE (24h) ****************/
-function todayKey(){const n=new Date();return `${n.getFullYear()}-${String(n.getMonth()+1).padStart(2,'0')}-${String(n.getDate()).padStart(2,'0')}`}
-const S_PLAY = 'rasca3_done'; const S_DATE='rasca3_date'; const S_PRIZE='rasca3_prize'; const S_CODE='rasca3_code'; const S_TS='rasca3_ts';
-function dailyResetIfNeeded(){ const today=todayKey(); const d=localStorage.getItem(S_DATE); if(!d){localStorage.setItem(S_DATE,today);} else if(d!==today){ localStorage.removeItem(S_PLAY); localStorage.removeItem(S_PRIZE); localStorage.removeItem(S_CODE); localStorage.removeItem(S_TS); localStorage.setItem(S_DATE,today); }}
-function alreadyPlayed(){ return localStorage.getItem(S_PLAY)==='1'; }
-
-/**************** AUDIO ****************/
-const AudioKit=(()=>{ const Ctx=window.AudioContext||window.webkitAudioContext; const ctx=new Ctx(); let unlocked=false; function unlock(){ if(!unlocked){ ctx.resume().catch(()=>{}); unlocked=true; } }
-  function blip(freq=900,dur=0.04,vol=0.05){ try{ const o=ctx.createOscillator(); const g=ctx.createGain(); o.type='triangle'; o.frequency.value=freq; g.gain.value=0; o.connect(g).connect(ctx.destination); const t=ctx.currentTime; g.gain.linearRampToValueAtTime(vol, t+0.005); g.gain.exponentialRampToValueAtTime(0.0001, t+dur); o.start(t); o.stop(t+dur);}catch(e){} }
-  return {unlock, blip}; })();
-
-document.addEventListener('click',()=>AudioKit.unlock(),{once:true});
-soundToggle.addEventListener('click',()=>{ soundOn=!soundOn; soundState.textContent=soundOn?'ON':'OFF'; });
-
-/**************** PRIZES ****************/
-function pickWeighted(arr){ const total=arr.reduce((s,a)=>s+a.weight,0); let r=Math.random()*total; for(const a of arr){ r-=a.weight; if(r<=0) return {...a}; } return {...arr[arr.length-1]}; }
-function makeThreeUnique(pool){ const res=[]; const used=new Set(); let guard=0; while(res.length<3 && guard<50){ const p=pickWeighted(pool); const key=p.label; if(!used.has(key) || pool.length<3){ res.push(p); used.add(key); } guard++; } while(res.length<3) res.push(pool[Math.floor(Math.random()*pool.length)]); return res; }
-
-/**************** COUNTDOWN ****************/
-function endOfDay(){ const n=new Date(); return new Date(n.getFullYear(),n.getMonth(),n.getDate(),23,59,0,0).getTime(); }
-function tickCountdown(){ if(!CONFIG.countdownToEndOfDay) return; const ms=endOfDay()-Date.now(); const total=Math.max(0,Math.floor(ms/1000)); const h=Math.floor(total/3600), m=Math.floor((total%3600)/60), s=total%60; countdownEl.textContent=h>0?`${h}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`:`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`; }
-setInterval(tickCountdown,1000); tickCountdown();
-
-/**************** CLAIM CODE ****************/
-const SALT = 'bet300-rasca3-v1';
-function tsString(d=new Date()){ const dd=String(d.getDate()).padStart(2,'0'),mm=String(d.getMonth()+1).padStart(2,'0'),yyyy=d.getFullYear(); const hh=String(d.getHours()).padStart(2,'0'),mi=String(d.getMinutes()).padStart(2,'0'); return `${dd}/${mm}/${yyyy} ${hh}:${mi}`; }
-async function sha256hex(msg){ const enc=new TextEncoder().encode(msg); const buf=await crypto.subtle.digest('SHA-256',enc); return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,"0")).join('').toUpperCase(); }
-async function makeClaimCode(prizeLabel){ const base=`${todayKey()}|${prizeLabel}|pc:${pc||'0'}|${SALT}`; const hex=await sha256hex(base); return hex.slice(0,10); }
-function whatsappText(prizeLabel){ const code = localStorage.getItem(S_CODE) || '(SIN-COD)'; const ts = localStorage.getItem(S_TS) || tsString(); return `Hola, gané ${prizeLabel} en la raspadita y quiero reclamarlo con mi próxima carga. Código: ${code} · ${ts}`; }
-
-/**************** SCRATCH (3 CANVAS) ****************/
-const tickets=[
-  {canvas:document.getElementById('c0'), labelEl:document.getElementById('p0'), revealed:false, cleared:0},
-  {canvas:document.getElementById('c1'), labelEl:document.getElementById('p1'), revealed:false, cleared:0},
-  {canvas:document.getElementById('c2'), labelEl:document.getElementById('p2'), revealed:false, cleared:0},
-];
-let chosenIdx = null; let prizeChosen = null; let scratchDisabled = false;
+// Configuración básica
+const PRIZES = ["$2000","$3000","$5000","$7000","Upgrade de Bono"];
 
 function sizeCanvas(cv){
-  const holder = cv.parentElement; // .ticket
-  const w = holder.clientWidth || 320;
-  let h = holder.clientHeight;
-  if(!h || h<40){
-    // En mobile hacemos cuadrado para reducir scroll
-    const isMobile = window.matchMedia('(max-width: 900px)').matches;
-    h = isMobile ? w : Math.round(w * 11/16);
-    holder.style.minHeight = h + 'px';
+  const holder = cv.parentElement;
+  const w = holder.clientWidth || 160;
+  const h = holder.clientHeight || w;
+  const dpr = window.devicePixelRatio || 1;
+  cv.width = Math.floor(w*dpr);
+  cv.height = Math.floor(h*dpr);
+  cv.style.width = w+'px';
+  cv.style.height = h+'px';
+  const ctx = cv.getContext('2d');
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  ctx.fillStyle = '#bbb';
+  ctx.fillRect(0,0,w,h);
+  ctx.fillStyle = 'rgba(255,255,255,0.4)';
+  for(let i=0;i<h;i+=12){ctx.fillRect(0,i,w,6)}
+  ctx.fillStyle = '#444';
+  ctx.font = "700 16px system-ui";
+  ctx.textAlign = "center";
+  ctx.fillText("Raspá para revelar",w/2,h/2);
+}
+
+function initScratch(cv,prize){
+  sizeCanvas(cv);
+  const ctx=cv.getContext('2d');
+  let scratched=0;let revealed=false;
+  function scratch(e){
+    const rect=cv.getBoundingClientRect();
+    const x=(e.touches?e.touches[0].clientX:e.clientX)-rect.left;
+    const y=(e.touches?e.touches[0].clientY:e.clientY)-rect.top;
+    ctx.globalCompositeOperation='destination-out';
+    ctx.beginPath();ctx.arc(x,y,20,0,Math.PI*2);ctx.fill();
+    scratched++;
+    if(!revealed && scratched>25){reveal(prize);revealed=true;}
   }
-  const dpr=window.devicePixelRatio||1;
-  cv.width = Math.floor(w*dpr); cv.height = Math.floor(h*dpr);
-  cv.style.width=w+'px'; cv.style.height=h+'px';
-  const ctx=cv.getContext('2d'); ctx.setTransform(dpr,0,0,dpr,0,0); ctx.globalCompositeOperation='source-over'; ctx.fillStyle='#bfc3cc'; ctx.fillRect(0,0,w,h);
-}
-function setMasking(ctx){ ctx.globalCompositeOperation='destination-out'; }
-function drawScratch(ctx,x,y){ ctx.beginPath(); ctx.arc(x,y, 22, 0, Math.PI*2); ctx.fill(); }
-function percentCleared(cv){ const ctx=cv.getContext('2d'); const w=cv.clientWidth, h=cv.clientHeight; const step=8; const img=ctx.getImageData(0,0,w,h).data; let cleared=0,total=0; for(let y=0;y<h;y+=step){ for(let x=0;x<w;x+=step){ const idx=((y*w+x)*4)+3; const a=img[idx]; total++; if(a<16) cleared++; } } return cleared/total; }
-
-function attachScratchHandlers(){
-  tickets.forEach((t,i)=>{
-    sizeCanvas(t.canvas);
-    const ctx=t.canvas.getContext('2d');
-    let scratching=false; let rect;
-    const pointer=(ev)=>{ const e=ev.touches?ev.touches[0]:ev; const x=(e.clientX-rect.left); const y=(e.clientY-rect.top); drawScratch(ctx,x,y); if(soundOn) AudioKit.blip(900,.02,.04); };
-    const start=(ev)=>{ if(scratchDisabled) return; ev.preventDefault(); rect=t.canvas.getBoundingClientRect(); setMasking(ctx); scratching=true; if(chosenIdx===null) chosenIdx=i; };
-    const move =(ev)=>{ if(!scratching) return; pointer(ev); };
-    const end  =()=>{ if(!scratching) return; scratching=false; const p=percentCleared(t.canvas); t.cleared=p; if(p>=CONFIG.scratchThreshold && !t.revealed){ t.revealed=true; onReveal(i); } };
-
-    t.canvas.addEventListener('mousedown',start); t.canvas.addEventListener('mousemove',move); window.addEventListener('mouseup',end);
-    t.canvas.addEventListener('touchstart',start,{passive:false}); t.canvas.addEventListener('touchmove',move,{passive:false}); window.addEventListener('touchend',end);
-  });
+  cv.addEventListener('mousedown',scratch);
+  cv.addEventListener('mousemove',e=>{if(e.buttons) scratch(e)});
+  cv.addEventListener('touchmove',scratch);
 }
 
-function disableOtherTickets(winnerIdx){ document.querySelectorAll('.ticket').forEach((el,idx)=>{ if(idx!==winnerIdx){ el.classList.add('disabled'); el.querySelector('canvas').style.pointerEvents='none'; } }); }
-function confettiBurst(){ confetti.innerHTML=''; const n=28; for(let i=0;i<n;i++){ const p=document.createElement('i'); p.style.left=(Math.random()*100)+'vw'; p.style.animationDelay=(Math.random()*0.5)+'s'; p.style.background=Math.random()<.5?'linear-gradient(#80ffea,#4e9cff)':'linear-gradient(#ffd166,#ff3d7f)'; confetti.appendChild(p);} setTimeout(()=>{confetti.innerHTML='';},1800); }
-
-async function onReveal(idx){
-  if(CONFIG.allowOnePlayPerDay && alreadyPlayed()) return;
-  if(!prizeChosen){ prizeChosen = tickets[idx].labelEl.textContent || 'Premio'; }
-  disableOtherTickets(idx); document.querySelectorAll('.ticket')[idx].classList.add('won');
-  const code = await makeClaimCode(prizeChosen); const ts = tsString();
-  localStorage.setItem(S_CODE, code); localStorage.setItem(S_TS, ts);
-  localStorage.setItem(S_PRIZE, JSON.stringify({label:prizeChosen}));
-  localStorage.setItem(S_PLAY, '1');
-  badge.textContent = prizeChosen; title.textContent='🎉 ¡Premio obtenido!'; subtitle.innerHTML='Se acredita con tu <b>próxima carga mínima</b>.'; stampEl.textContent=`Código: ${code} · ${ts}`;
-  claimBtn.disabled=false; claimBtn.onclick=()=>location.href=`https://wa.me/${WA}?text=${encodeURIComponent( whatsappText(prizeChosen) )}`;
-  confettiBurst(); triesLeftEl.textContent='0'; scratchDisabled=true;
+function reveal(prize){
+  const code=Math.random().toString(36).substring(2,8).toUpperCase();
+  document.getElementById('prizeValue').textContent=prize;
+  document.getElementById('prizeText').innerHTML=`¡Felicitaciones! Sumás <b>${prize}</b> en tu próxima carga.`;
+  document.getElementById('prizeCode').textContent=`Código: ${code} - ${new Date().toLocaleString()}`;
+  document.getElementById('prizeModal').style.display='flex';
+  document.getElementById('claimBtn').href=`https://wa.me/5491157737173?text=Hola, gané ${prize} con el código ${code}`;
+  document.getElementById('enterBtn').href='https://plataforma.example/inicio';
 }
 
-function restoreIfPlayed(){ if(!alreadyPlayed()) return; const saved = localStorage.getItem(S_PRIZE); if(saved){ const p=JSON.parse(saved); const code=localStorage.getItem(S_CODE)||'—'; const ts=localStorage.getItem(S_TS)||tsString(); badge.textContent=p.label; title.textContent='🎉 ¡Premio obtenido!'; subtitle.innerHTML='Se acredita con tu <b>próxima carga mínima</b>.'; stampEl.textContent=`Código: ${code} · ${ts}`; claimBtn.disabled=false; claimBtn.onclick=()=>location.href=`https://wa.me/${WA}?text=${encodeURIComponent( whatsappText(p.label) )}`; document.querySelectorAll('.ticket').forEach(el=>el.classList.add('disabled')); triesLeftEl.textContent='0'; scratchDisabled=true; } }
+function closeModal(){document.getElementById('prizeModal').style.display='none'}
 
-/**************** INIT ****************/
-function init(){
-  dailyResetIfNeeded();
-  // repartir premios visibles en las 3 tarjetas
-  const picks = makeThreeUnique(CONFIG.prizesPool);
-  [0,1,2].forEach(i=>{ document.getElementById('p'+i).textContent = picks[i].label; });
-  attachScratchHandlers();
-  restoreIfPlayed();
-}
-
-init();
+// Init
+const cvs=document.querySelectorAll('.ticket canvas');
+let used=false;
+cvs.forEach((cv,i)=>{
+  initScratch(cv,PRIZES[i%PRIZES.length]);
+  cv.addEventListener('mousedown',()=>{if(used)cv.style.pointerEvents='none';else used=true});
+  cv.addEventListener('touchstart',()=>{if(used)cv.style.pointerEvents='none';else used=true});
+});
 </script>
 </body>
 </html>

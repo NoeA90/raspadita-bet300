@@ -1,15 +1,384 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BET300 - Bono de Bienvenida</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BET300 · Rasca y Gana</title>
+  <style>
+    :root{
+      --bg:#0b0b0e;            /* fondo oscuro estilo app */
+      --card:#14141a;          /* paneles */
+      --muted:#7a7a86;         /* texto secundario */
+      --text:#f5f7fb;          /* texto principal */
+      --brand:#ffd76a;         /* dorado suave */
+      --brand-strong:#ffb400;  /* dorado intenso para acentos */
+      --accent:#18d26e;        /* verde éxito */
+      --danger:#ff5d5d;        /* rojo */
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --radius: 18px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family:ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, "Helvetica Neue", Arial;
+      background: radial-gradient(1200px 800px at 50% -200px, rgba(255,212,96,.12), transparent 60%), var(--bg);
+      color:var(--text);
+      display:flex; align-items:center; justify-content:center;
+      padding:24px;
+    }
+    .wrap{width:100%; max-width:980px}
+    .header{
+      display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:16px;
+    }
+    .brand{
+      display:flex; align-items:center; gap:12px; font-weight:800; letter-spacing:.5px;
+    }
+    .brand-logo{
+      width:36px; height:36px; border-radius:10px;
+      background: linear-gradient(135deg, var(--brand-strong), #ffe89a);
+      box-shadow: 0 4px 16px rgba(255, 212, 96, .35);
+    }
+    .badge{font-size:12px; color:var(--bg); background:var(--brand); padding:4px 8px; border-radius:999px; font-weight:700}
+    .timer{display:flex; align-items:center; gap:8px; font-weight:700}
+    .pill{
+      border:1px solid #2a2a33; border-radius:999px; padding:6px 10px; color:var(--muted); display:flex; align-items:center; gap:8px; backdrop-filter: blur(6px);
+    }
+    .sound-toggle{ cursor:pointer; user-select:none; }
+
+    .hero{
+      background: linear-gradient(180deg, rgba(255, 212, 96, .06), rgba(0,0,0,0)) , var(--card);
+      border:1px solid #1e1e26; border-radius: var(--radius);
+      padding:20px; box-shadow: var(--shadow);
+      display:grid; grid-template-columns: 1.1fr .9fr; gap:16px;
+    }
+    @media (max-width: 860px){ .hero{ grid-template-columns: 1fr; } }
+
+    .left h1{ margin: 4px 0 8px; font-size: clamp(24px, 3.5vw, 34px); }
+    .left p{ margin: 8px 0; color:var(--muted); }
+
+    .cta-row{ display:flex; flex-wrap:wrap; gap:10px; margin-top:12px }
+    .btn{
+      appearance:none; border:0; cursor:pointer; border-radius:14px; padding:12px 16px; font-weight:800; letter-spacing:.2px; transition:.2s transform, .2s box-shadow, .2s background;
+      color:#0d0f14; background:var(--brand); box-shadow: 0 8px 22px rgba(255, 212, 96, .25);
+    }
+    .btn:hover{ transform: translateY(-1px) }
+    .btn.secondary{ background:#1e1e26; color:var(--text); border:1px solid #2a2a33; box-shadow:none }
+    .btn.ghost{ background:transparent; color:var(--text); border:1px dashed #3a3a46 }
+    .btn:disabled{ opacity:.6; cursor:not-allowed }
+
+    .tile{
+      background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(0,0,0,0));
+      border:1px solid #1f1f28; border-radius: var(--radius); padding:14px; box-shadow: var(--shadow);
+    }
+    .status{ display:flex; align-items:center; gap:8px; color:#d6d7de }
+    .status strong{ color:var(--brand-strong) }
+
+    /* RASCA */
+    .scratch{
+      position:relative; width:100%; aspect-ratio: 16/11; border-radius:14px; overflow:hidden; background:#0e0f14; border:1px solid #23232c; box-shadow: inset 0 0 0 1px rgba(255,255,255,.02);
+    }
+    .prize{
+      position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; text-align:center; padding:16px;
+      background: radial-gradient(500px 300px at 50% 0%, rgba(255,212,96,.15), transparent 60%);
+    }
+    .prize h2{ font-size: clamp(26px,4.2vw,42px); margin:0; text-shadow: 0 2px 24px rgba(255,212,96,.28) }
+    .prize small{ color:var(--muted) }
+
+    canvas#coat{
+      position:absolute; inset:0; width:100%; height:100%;
+      background: repeating-linear-gradient(45deg, #c4c7cf 0px, #c4c7cf 8px, #b7bac2 8px, #b7bac2 16px);
+      box-shadow: inset 0 0 32px rgba(0,0,0,.35);
+      cursor: crosshair;
+    }
+
+    .footnote{ color:var(--muted); font-size:12px; text-align:center; margin-top:12px }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <img src="background.png" alt="Promoción BET300">
-        <a class="cta-button" href="https://wa.me/5491126980720" target="_blank">RECLAMAR</a>
+  <div class="wrap">
+    <!-- Header -->
+    <div class="header">
+      <div class="brand">
+        <div class="brand-logo" aria-hidden="true"></div>
+        <div>
+          <div style="display:flex; align-items:center; gap:10px;">
+            <span>BET300</span>
+            <span class="badge">Promo interactiva ⚡</span>
+          </div>
+          <div class="pill" style="margin-top:6px">
+            <span>Tiempo limitado</span>
+            <span class="timer" id="timer">--:--</span>
+          </div>
+        </div>
+      </div>
+      <div class="pill sound-toggle" id="soundToggle" role="button" aria-pressed="true" title="Sonido">
+        <span>Sonido:</span><strong id="soundState">ON</strong>
+      </div>
     </div>
+
+    <div class="hero">
+      <!-- Left side copy & CTAs -->
+      <div class="left">
+        <p class="status">Tenés <strong id="triesLeft">1</strong> raspe disponible</p>
+        <h1>Rasca y Gana · Premios por tiempo limitado</h1>
+        <p>Los premios se acreditan con tu próxima carga mínima. Acceso especial para usuarios que ya jugaron.</p>
+        <div class="cta-row">
+          <a class="btn" id="linkPlataforma" href="#" target="_blank" rel="nofollow noopener">Entrar a la plataforma</a>
+          <button class="btn secondary" id="btnReclamar" disabled>Reclamar</button>
+          <button class="btn ghost" id="btnReiniciar" disabled>Reiniciar</button>
+        </div>
+      </div>
+
+      <!-- Right side: Scratch Card -->
+      <div class="tile">
+        <div class="scratch" id="scratch">
+          <div class="prize" id="prizeLayer">
+            <small>Premio revelado</small>
+            <h2 id="prizeText">—</h2>
+            <small id="prizeNote">Con tu próxima carga mínima</small>
+          </div>
+          <canvas id="coat"></canvas>
+        </div>
+        <div class="footnote">Rascá con el dedo (móvil) o el mouse (PC) para revelar tu premio.</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /******************* CONFIG *******************/
+    const CONFIG = {
+      whatsappLink: "https://bit.ly/tu-link-whatsapp",   // ⚠️ Reemplazar
+      plataformaLink: "https://c03.bet300vip.com/",      // ⚠️ Reemplazar
+      eventLabel: "RascaYGana",
+      countdownMinutes: 15,      // temporizador visible (marketing)
+      allowOnePlay: true,         // 1 intento por usuario/24h
+      scratchThreshold: 0.55,     // % revelado para validar premio
+      // Tabla de premios (ajustar montos/textos). weight define probabilidad relativa.
+      prizes: [
+        { label: "Fichas +$10.000", note:"Válido con tu próxima carga", weight: 3 },
+        { label: "Fichas +$7.000",  note:"Válido con tu próxima carga", weight: 6 },
+        { label: "Fichas +$5.000",  note:"Válido con tu próxima carga", weight: 10 },
+        { label: "Tirada de Ruleta", note:"Válida al cargar", weight: 8 },
+        { label: "Upgrade de Bono", note:"Mejoramos tu beneficio al cargar", weight: 5 },
+      ]
+    }
+
+    /******************* STATE *******************/
+    const state = {
+      audioOn: true,
+      played: false,
+      revealed: false,
+      scratching: false,
+      percentCleared: 0,
+      currentPrize: null,
+    }
+
+    // Persistencia simple (24h)
+    const PLAY_KEY = "rasca_played_at";
+    const PRIZE_KEY = "rasca_prize";
+
+    function playedRecently(){
+      const t = localStorage.getItem(PLAY_KEY);
+      if(!t) return false;
+      const diff = Date.now() - Number(t);
+      return diff < 24*60*60*1000; // 24h
+    }
+
+    function setPlayed(){
+      localStorage.setItem(PLAY_KEY, String(Date.now()));
+    }
+
+    /******************* UTIL *******************/
+    function pickWeighted(arr){
+      const total = arr.reduce((s,a)=>s+a.weight,0);
+      let r = Math.random()*total;
+      for(const a of arr){ r -= a.weight; if(r<=0) return a; }
+      return arr[arr.length-1];
+    }
+
+    function formatMMSS(totalSeconds){
+      const m = Math.floor(totalSeconds/60).toString().padStart(2,'0');
+      const s = Math.floor(totalSeconds%60).toString().padStart(2,'0');
+      return `${m}:${s}`;
+    }
+
+    /******************* SOUND FX *******************/
+    let ctx; let osc; let gain;
+    function beep(freq=880, dur=0.06){
+      if(!state.audioOn) return;
+      try{
+        if(!ctx) ctx = new (window.AudioContext||window.webkitAudioContext)();
+        osc = ctx.createOscillator(); gain = ctx.createGain();
+        osc.type = 'triangle'; osc.frequency.value = freq;
+        gain.gain.value = 0.04; osc.connect(gain); gain.connect(ctx.destination);
+        osc.start(); setTimeout(()=>{ osc.stop() }, dur*1000);
+      }catch(e){ /*silencio*/ }
+    }
+
+    /******************* TIMER *******************/
+    (function initTimer(){
+      const timer = document.getElementById('timer');
+      let left = CONFIG.countdownMinutes*60;
+      timer.textContent = formatMMSS(left);
+      setInterval(()=>{
+        left = Math.max(0, left-1);
+        timer.textContent = formatMMSS(left);
+      },1000);
+    })();
+
+    /******************* HEADER / CTAS *******************/
+    document.getElementById('soundToggle').addEventListener('click',()=>{
+      state.audioOn = !state.audioOn;
+      document.getElementById('soundState').textContent = state.audioOn? 'ON':'OFF';
+      beep(520, .05);
+    });
+
+    const btnReclamar = document.getElementById('btnReclamar');
+    const btnReiniciar = document.getElementById('btnReiniciar');
+    const triesLeft = document.getElementById('triesLeft');
+
+    document.getElementById('linkPlataforma').href = CONFIG.plataformaLink;
+
+    btnReclamar.addEventListener('click',()=>{
+      window.location.href = CONFIG.whatsappLink;
+    });
+
+    btnReiniciar.addEventListener('click',()=>{
+      // Permite reiniciar si no se limitó a 1 por día
+      if(CONFIG.allowOnePlay) return;
+      localStorage.removeItem(PLAY_KEY);
+      localStorage.removeItem(PRIZE_KEY);
+      location.reload();
+    });
+
+    /******************* SCRATCH CANVAS *******************/
+    const scratch = document.getElementById('scratch');
+    const prizeText = document.getElementById('prizeText');
+    const prizeNote = document.getElementById('prizeNote');
+    const coat = document.getElementById('coat');
+    const ctx2d = coat.getContext('2d');
+
+    function sizeCanvas(){
+      const r = scratch.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      coat.width = Math.floor(r.width * dpr);
+      coat.height = Math.floor(r.height * dpr);
+      coat.style.width = r.width + 'px';
+      coat.style.height = r.height + 'px';
+      ctx2d.scale(dpr,dpr);
+      // repintar cobertura gris
+      ctx2d.globalCompositeOperation = 'source-over';
+      ctx2d.fillStyle = '#bfc3cc';
+      ctx2d.fillRect(0,0,r.width,r.height);
+    }
+
+    function setMasking(){ ctx2d.globalCompositeOperation = 'destination-out'; }
+
+    function updateClearedPercent(){
+      // sampling rápida (no costosa) sobre una grilla
+      const step = 8; // px
+      const r = coat.getBoundingClientRect();
+      let cleared = 0, total = 0;
+      const img = ctx2d.getImageData(0,0,r.width,r.height).data;
+      for(let y=0; y<r.height; y+=step){
+        for(let x=0; x<r.width; x+=step){
+          const idx = ((y*r.width + x) * 4) + 3; // alpha
+          const alpha = img[idx];
+          total++;
+          if(alpha < 16) cleared++;
+        }
+      }
+      state.percentCleared = cleared/total;
+      if(!state.revealed && state.percentCleared >= CONFIG.scratchThreshold){
+        state.revealed = true; onReveal();
+      }
+    }
+
+    function drawScratch(x,y){
+      ctx2d.beginPath(); ctx2d.arc(x,y, 24, 0, Math.PI*2); ctx2d.fill();
+    }
+
+    function attachScratch(){
+      const r = coat.getBoundingClientRect();
+      const pointer = (ev)=>{
+        const e = ev.touches? ev.touches[0]: ev;
+        const x = (e.clientX - r.left); const y = (e.clientY - r.top);
+        drawScratch(x,y); beep(900, .015);
+      }
+      const start = (ev)=>{ ev.preventDefault(); state.scratching = true; setMasking(); pointer(ev); }
+      const move  = (ev)=>{ if(!state.scratching) return; pointer(ev); }
+      const end   = ()=>{ state.scratching = false; updateClearedPercent(); }
+
+      coat.addEventListener('mousedown', start);
+      coat.addEventListener('mousemove', move);
+      window.addEventListener('mouseup', end);
+      coat.addEventListener('touchstart', start, {passive:false});
+      coat.addEventListener('touchmove',  move,  {passive:false});
+      window.addEventListener('touchend', end);
+    }
+
+    function choosePrize(){
+      const saved = localStorage.getItem(PRIZE_KEY);
+      if(saved){
+        try{ return JSON.parse(saved) }catch{ /*ignore*/ }
+      }
+      const p = pickWeighted(CONFIG.prizes);
+      localStorage.setItem(PRIZE_KEY, JSON.stringify(p));
+      return p;
+    }
+
+    function initPrize(){
+      state.currentPrize = choosePrize();
+      prizeText.textContent = state.currentPrize.label;
+      prizeNote.textContent = state.currentPrize.note || 'Con tu próxima carga mínima';
+    }
+
+    function lockPlayIfNeeded(){
+      if(CONFIG.allowOnePlay && playedRecently()){
+        state.played = true;
+        triesLeft.textContent = '0';
+        document.querySelector('.footnote').textContent = 'Ya participaste en las últimas 24 horas. Volvé más tarde.';
+        coat.style.pointerEvents = 'none';
+        btnReiniciar.disabled = true; // sin reinicio si es 1/día
+      }
+    }
+
+    function onReveal(){
+      setPlayed();
+      triesLeft.textContent = '0';
+      btnReclamar.disabled = false;
+      confetti();
+    }
+
+    // mini confetti sin librerías
+    function confetti(){
+      const n = 80;
+      for(let i=0;i<n;i++){
+        const s = document.createElement('span');
+        s.style.position='fixed'; s.style.left = (Math.random()*100)+'vw'; s.style.top='-10px';
+        s.style.width='6px'; s.style.height='10px'; s.style.background='hsl('+Math.floor(Math.random()*360)+' 80% 60%)';
+        s.style.transform = 'rotate('+Math.random()*360+'deg)'; s.style.borderRadius='2px';
+        s.style.pointerEvents='none'; s.style.zIndex=9999; s.style.opacity='.9';
+        document.body.appendChild(s);
+        const dx = (Math.random()*2-1) * 0.5; const dur = 1200 + Math.random()*1200;
+        const start = performance.now();
+        function fall(t){
+          const p = Math.min(1, (t-start)/dur);
+          s.style.top = (p*110)+'vh';
+          s.style.left = `calc(${s.style.left} + ${dx*(p*100)}px)`;
+          s.style.opacity = (1-p).toString();
+          if(p<1) requestAnimationFrame(fall); else s.remove();
+        }
+        requestAnimationFrame(fall);
+      }
+    }
+
+    // INIT
+    window.addEventListener('resize', sizeCanvas);
+    sizeCanvas();
+    attachScratch();
+    initPrize();
+    lockPlayIfNeeded();
+  </script>
 </body>
 </html>

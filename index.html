@@ -6,28 +6,28 @@
   <title>BET300 · Rasca y Gana (3 opciones)</title>
   <style>
     :root{
-      --bg:#0b0f1e; --panel:#121634; --panel2:#0f1330; --border:#1e2150;
-      --text:#e8ebff; --muted:#b7b9d6; --ok:#25D366; --gold:#ffd76a; --gold-2:#ffb400;
+      /* Paleta del primer estilo (fondo oscuro + dorados) */
+      --bg:#0b0b0e; --panel:#14141a; --panel2:#101016; --border:#23232c;
+      --text:#f5f7fb; --muted:#8e90a0; --ok:#25D366; --gold:#ffd76a; --gold-2:#ffb400;
       --shadow: 0 15px 40px rgba(0,0,0,.35); --radius:18px;
     }
     *{box-sizing:border-box}
     html,body{height:100%}
     body{
-      margin:0;color:var(--text);background:var(--bg);font:16px/1.35 system-ui,-apple-system,Segoe UI,Roboto;
-      background-image:
-        radial-gradient(900px 500px at 50% -10%, rgba(101,74,255,.25), transparent),
-        radial-gradient(700px 350px at 100% 0%, rgba(0,209,255,.18), transparent),
-        linear-gradient(180deg,#0b0f1e 0%,#0b0f1e 60%,#0a0d20 100%);
-      background-attachment: fixed;
+      margin:0;color:var(--text);font:16px/1.35 system-ui,-apple-system,Segoe UI,Roboto;
+      background:
+        radial-gradient(1200px 800px at 50% -200px, rgba(255,212,96,.12), transparent 60%),
+        radial-gradient(800px 500px at 100% -100px, rgba(120,90,255,.10), transparent 60%),
+        var(--bg);
     }
     .container{max-width:980px;margin:14px auto;padding:0 14px 92px}
-    .card{background: radial-gradient(120% 100% at 50% 0%, rgba(124,77,255,.08), transparent), var(--panel2);
+    .card{background:linear-gradient(180deg, rgba(255, 215, 106, .06), rgba(0,0,0,0)), var(--panel2);
       border:1px solid var(--border);border-radius:18px;padding:18px;box-shadow:var(--shadow)}
     @media(max-width:520px){.container{padding:0 0 92px}.card{border-radius:0;border-left:0;border-right:0;padding:14px}}
 
     .head{display:flex;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap}
     .brand{height:28px;width:auto;filter:drop-shadow(0 2px 8px rgba(0,0,0,.4))}
-    .pill{background:linear-gradient(90deg,rgba(124,77,255,.15),rgba(0,209,255,.15));border:1px solid var(--border);
+    .pill{background:linear-gradient(90deg,rgba(255,212,96,.15),rgba(124,77,255,.15));border:1px solid var(--border);
       border-radius:999px;padding:6px 10px;font-size:12px;color:var(--muted)}
     .pill.time{display:flex;gap:8px;align-items:center}
     .pill.sound{cursor:pointer;user-select:none}
@@ -37,16 +37,14 @@
     .grid{display:grid;gap:16px;grid-template-columns:1.1fr .9fr}
     @media(max-width:900px){.grid{grid-template-columns:1fr}}
 
-    /* Lado derecho: info */
     .panel{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:16px}
     .center{text-align:center}
     h1,h2,h3,p{margin:0 0 8px} h1{font-size:24px} .muted{color:var(--muted)}
     .stat{display:flex;gap:12px;align-items:center;justify-content:center;margin:8px 0 14px}
-    .badge{min-width:92px;height:46px;border-radius:12px;background:radial-gradient(100% 100% at 50% 0%, rgba(0,209,255,.35), rgba(124,77,255,.35));
-      display:grid;place-items:center;font-weight:800;font-size:16px;box-shadow:inset 0 0 10px rgba(124,77,255,.35)}
+    .badge{min-width:92px;height:46px;border-radius:12px;background:radial-gradient(100% 100% at 50% 0%, rgba(0,209,255,.28), rgba(124,77,255,.28));
+      display:grid;place-items:center;font-weight:800;font-size:16px;box-shadow:inset 0 0 10px rgba(124,77,255,.25)}
     .smallline{font-size:12px;color:var(--muted);margin-top:4px}
 
-    /* Bloque plataforma */
     .promo{display:grid;grid-template-columns:1fr minmax(200px,260px);align-items:center;gap:12px;margin-top:10px;padding:12px;border:1px dashed var(--border);border-radius:12px}
     .promo.expired{border-color:rgba(255,107,107,.5)}
     .promo .copy{display:grid;gap:4px}
@@ -55,7 +53,6 @@
       background:linear-gradient(90deg,#ffd166,#ff7ab6);color:#0a0f20;box-shadow:0 8px 20px rgba(0,0,0,.25)}
     @media(max-width:520px){.promo{grid-template-columns:1fr}.btn.play{width:100%}}
 
-    /* Dock inferior */
     .dock{position:fixed;left:0;right:0;bottom:0;z-index:10;background:linear-gradient(180deg, rgba(11,15,30,0) 0%, rgba(11,15,30,.85) 22%, rgba(11,15,30,.95) 100%);
       padding:10px 16px 14px;display:flex;gap:12px;align-items:center}
     .btn{appearance:none;border:none;cursor:pointer;padding:14px 16px;border-radius:14px;font-weight:800;background:linear-gradient(90deg,#6c59ff,#00d1ff);color:#0a0f20;width:100%;
@@ -63,11 +60,17 @@
     .btn:disabled{opacity:.55;cursor:not-allowed}
     .btn.ok{background:#25D366;color:#0b0f1e}
 
-    /* Zona de raspaditas (3 tarjetas) */
+    /* === Zona de raspaditas (3 tarjetas) === */
     .scratch-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
     @media(max-width:820px){.scratch-grid{grid-template-columns:1fr}}
 
-    .ticket{position:relative;border-radius:16px;overflow:hidden;border:1px solid var(--border);background:linear-gradient(180deg, rgba(255, 215, 106, .08), rgba(0,0,0,0)), var(--panel2);box-shadow:var(--shadow)}
+    .ticket{position:relative;border-radius:16px;overflow:hidden;border:1px solid var(--border);
+      background:linear-gradient(180deg, rgba(255, 215, 106, .08), rgba(0,0,0,0)), var(--panel2);box-shadow:var(--shadow);
+      /* ¡Clave!: definir altura con aspect-ratio para que el canvas tenga tamaño */
+      aspect-ratio: 16 / 11; min-height: 220px;
+    }
+    @media(max-width:520px){ .ticket{ min-height: 200px; } }
+
     .ticket .top{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;text-align:center;padding:14px;background:radial-gradient(500px 240px at 50% 0%, rgba(255,215,106,.18), transparent 60%)}
     .ticket h3{margin:0;font-size:clamp(20px, 4.2vw, 28px);text-shadow:0 2px 24px rgba(255,215,106,.28)}
     .ticket small{color:var(--muted)}
@@ -75,7 +78,6 @@
     .ticket.disabled canvas{pointer-events:none;filter:grayscale(1);opacity:.6}
     .ticket.won{outline:2px solid var(--gold)}
 
-    /* Confetti (papelitos) */
     .confetti{position:fixed;inset:0;pointer-events:none;z-index:40}
     .confetti i{position:absolute;top:-20px;width:10px;height:14px;border-radius:2px;opacity:0;animation:confFall 1.6s linear forwards}
     @keyframes confFall{8%{opacity:1}100%{transform:translateY(110vh) rotate(360deg);opacity:0}}
@@ -83,7 +85,6 @@
 </head>
 <body>
 
-<!-- papelitos -->
 <div id="confetti" class="confetti" aria-hidden="true"></div>
 
 <div class="container">
@@ -96,7 +97,6 @@
     </div>
 
     <div class="grid">
-      <!-- IZQ: 3 raspaditas -->
       <div class="panel">
         <div class="scratch-grid" id="scratchGrid">
           <div class="ticket" data-idx="0">
@@ -115,7 +115,6 @@
         <p class="muted" style="margin-top:10px">Tenés <b id="triesLeft">1</b> raspe disponible para elegir <b>una</b> tarjeta.</p>
       </div>
 
-      <!-- DER: info + CTAs -->
       <div class="panel">
         <div class="center">
           <div class="stat">
@@ -146,15 +145,13 @@
   </div>
 </div>
 
-<!-- Dock fijo -->
 <div class="dock">
   <button id="claimBtn" class="btn ok" disabled>📲 Reclamar</button>
 </div>
 
 <script>
-/*************** CONFIG ***************/
 const CONFIG = {
-  whatsappLinkByPC: { principal: "5491157737173", pc1:"5491138601132", pc2:"5491138214312", pc3:"5491166306349" }, // wa.me
+  whatsappLinkByPC: { principal: "5491157737173", pc1:"5491138601132", pc2:"5491138214312", pc3:"5491166306349" },
   plataformaByPC:   { principal: "https://plataforma.example/inicio", pc1:"https://c01.bet300vip.com/", pc2:"https://c02.bet300vip.com/", pc3:"https://c03.bet300vip.com/" },
   countdownToEndOfDay: true,
   scratchThreshold: .55,
@@ -168,7 +165,6 @@ const CONFIG = {
   ]
 };
 
-/*************** VARS ***************/
 let soundOn = true; const soundToggle=document.getElementById('soundToggle'); const soundState=document.getElementById('soundState');
 const triesLeftEl = document.getElementById('triesLeft');
 const claimBtn = document.getElementById('claimBtn');
@@ -180,17 +176,13 @@ let WA = CONFIG.whatsappLinkByPC.principal, PLATFORM = CONFIG.plataformaByPC.pri
 if(pc==='1'){WA=CONFIG.whatsappLinkByPC.pc1;PLATFORM=CONFIG.plataformaByPC.pc1}
 if(pc==='2'){WA=CONFIG.whatsappLinkByPC.pc2;PLATFORM=CONFIG.plataformaByPC.pc2}
 if(pc==='3'){WA=CONFIG.whatsappLinkByPC.pc3;PLATFORM=CONFIG.plataformaByPC.pc3}
-
-/* Set plataforma link */
 const playNow=document.getElementById('playNow'); playNow.href=PLATFORM;
 
-/*************** STORAGE (24h) ***************/
 function todayKey(){const n=new Date();return `${n.getFullYear()}-${String(n.getMonth()+1).padStart(2,'0')}-${String(n.getDate()).padStart(2,'0')}`}
 const S_PLAY = 'rasca3_done'; const S_DATE='rasca3_date'; const S_PRIZE='rasca3_prize'; const S_CODE='rasca3_code'; const S_TS='rasca3_ts';
 function dailyResetIfNeeded(){ const today=todayKey(); const d=localStorage.getItem(S_DATE); if(!d){localStorage.setItem(S_DATE,today);} else if(d!==today){ localStorage.removeItem(S_PLAY); localStorage.removeItem(S_PRIZE); localStorage.removeItem(S_CODE); localStorage.removeItem(S_TS); localStorage.setItem(S_DATE,today); }}
 function alreadyPlayed(){ return localStorage.getItem(S_PLAY)==='1'; }
 
-/*************** AUDIO ***************/
 const AudioKit=(()=>{ const Ctx=window.AudioContext||window.webkitAudioContext; const ctx=new Ctx(); let unlocked=false; function unlock(){ if(!unlocked){ ctx.resume().catch(()=>{}); unlocked=true; } }
   function blip(freq=900,dur=0.04,vol=0.05){ const o=ctx.createOscillator(); const g=ctx.createGain(); o.type='triangle'; o.frequency.value=freq; g.gain.value=0; o.connect(g).connect(ctx.destination); const t=ctx.currentTime; g.gain.linearRampToValueAtTime(vol, t+0.005); g.gain.exponentialRampToValueAtTime(0.0001, t+dur); o.start(t); o.stop(t+dur); }
   return {unlock, blip}; })();
@@ -198,46 +190,40 @@ const AudioKit=(()=>{ const Ctx=window.AudioContext||window.webkitAudioContext; 
 document.addEventListener('click',()=>AudioKit.unlock(),{once:true});
 soundToggle.addEventListener('click',()=>{ soundOn=!soundOn; soundState.textContent=soundOn?'ON':'OFF'; });
 
-/*************** PRIZES ***************/
 function pickWeighted(arr){ const total=arr.reduce((s,a)=>s+a.weight,0); let r=Math.random()*total; for(const a of arr){ r-=a.weight; if(r<=0) return {...a}; } return {...arr[arr.length-1]}; }
-function makeThreeUnique(pool){
-  // devuelve 3 premios (pueden repetirse si la pool es chica, pero intentamos evitar repetidos)
-  const res=[]; const used=new Set(); let guard=0;
-  while(res.length<3 && guard<50){ const p=pickWeighted(pool); const key=p.label; if(!used.has(key) || pool.length<3){ res.push(p); used.add(key); } guard++; }
-  while(res.length<3) res.push(pool[Math.floor(Math.random()*pool.length)]);
-  return res;
-}
+function makeThreeUnique(pool){ const res=[]; const used=new Set(); let guard=0; while(res.length<3 && guard<50){ const p=pickWeighted(pool); const key=p.label; if(!used.has(key) || pool.length<3){ res.push(p); used.add(key); } guard++; } while(res.length<3) res.push(pool[Math.floor(Math.random()*pool.length)]); return res; }
 
-/*************** COUNTDOWN ***************/
 function endOfDay(){ const n=new Date(); return new Date(n.getFullYear(),n.getMonth(),n.getDate(),23,59,0,0).getTime(); }
-function tickCountdown(){
-  if(!CONFIG.countdownToEndOfDay) return;
-  const ms=endOfDay()-Date.now(); const total=Math.max(0,Math.floor(ms/1000)); const h=Math.floor(total/3600), m=Math.floor((total%3600)/60), s=total%60;
-  countdownEl.textContent=h>0?`${h}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`:`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
-}
+function tickCountdown(){ const ms=endOfDay()-Date.now(); const total=Math.max(0,Math.floor(ms/1000)); const h=Math.floor(total/3600), m=Math.floor((total%3600)/60), s=total%60; countdownEl.textContent=h>0?`${h}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`:`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`; }
 setInterval(tickCountdown,1000); tickCountdown();
 
-/*************** CLAIM CODE ***************/
 const SALT = 'bet300-rasca3-v1';
 function tsString(d=new Date()){ const dd=String(d.getDate()).padStart(2,'0'),mm=String(d.getMonth()+1).padStart(2,'0'),yyyy=d.getFullYear(); const hh=String(d.getHours()).padStart(2,'0'),mi=String(d.getMinutes()).padStart(2,'0'); return `${dd}/${mm}/${yyyy} ${hh}:${mi}`; }
 async function sha256hex(msg){ const enc=new TextEncoder().encode(msg); const buf=await crypto.subtle.digest('SHA-256',enc); return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('').toUpperCase(); }
 async function makeClaimCode(prizeLabel){ const base=`${todayKey()}|${prizeLabel}|pc:${pc||'0'}|${SALT}`; const hex=await sha256hex(base); return hex.slice(0,10); }
 function whatsappText(prizeLabel){ const code = localStorage.getItem(S_CODE) || '(SIN-COD)'; const ts = localStorage.getItem(S_TS) || tsString(); return `Hola, gané ${prizeLabel} en la raspadita y quiero reclamarlo con mi próxima carga. Código: ${code} · ${ts}`; }
 
-/*************** SCRATCH (3 CANVAS) ***************/
 const tickets=[
   {canvas:document.getElementById('c0'), labelEl:document.getElementById('p0'), revealed:false, cleared:0},
   {canvas:document.getElementById('c1'), labelEl:document.getElementById('p1'), revealed:false, cleared:0},
   {canvas:document.getElementById('c2'), labelEl:document.getElementById('p2'), revealed:false, cleared:0},
 ];
-let chosenIdx = null; // índice de la tarjeta elegida (primera que raspan)
-let prizeChosen = null; // premio final del usuario
-let scratchDisabled = false;
+let chosenIdx = null; let prizeChosen = null; let scratchDisabled = false;
 
-function sizeCanvas(cv){ const r=cv.getBoundingClientRect(); const dpr=window.devicePixelRatio||1; cv.width=Math.floor(r.width*dpr); cv.height=Math.floor(r.height*dpr); cv.style.width=r.width+'px'; cv.style.height=r.height+'px'; const ctx=cv.getContext('2d'); ctx.setTransform(dpr,0,0,dpr,0,0); ctx.globalCompositeOperation='source-over'; ctx.fillStyle='#bfc3cc'; ctx.fillRect(0,0,r.width,r.height); }
+function sizeCanvas(cv){
+  // Si el height aún es 0 (antes de layout), forzamos por aspect-ratio 16/11
+  const holder = cv.parentElement; // .ticket
+  const w = holder.clientWidth || 320;
+  let h = holder.clientHeight;
+  if(!h || h<40){ h = Math.round(w * 11/16); holder.style.minHeight = h + 'px'; }
+  const dpr=window.devicePixelRatio||1;
+  cv.width = Math.floor(w*dpr); cv.height = Math.floor(h*dpr);
+  cv.style.width=w+'px'; cv.style.height=h+'px';
+  const ctx=cv.getContext('2d'); ctx.setTransform(dpr,0,0,dpr,0,0); ctx.globalCompositeOperation='source-over'; ctx.fillStyle='#bfc3cc'; ctx.fillRect(0,0,w,h);
+}
 function setMasking(ctx){ ctx.globalCompositeOperation='destination-out'; }
 function drawScratch(ctx,x,y){ ctx.beginPath(); ctx.arc(x,y, 22, 0, Math.PI*2); ctx.fill(); }
-function percentCleared(cv){ const ctx=cv.getContext('2d'); const r=cv.getBoundingClientRect(); const step=8; const img=ctx.getImageData(0,0,r.width,r.height).data; let cleared=0,total=0; for(let y=0;y<r.height;y+=step){ for(let x=0;x<r.width;x+=step){ const idx=((y*r.width+x)*4)+3; const a=img[idx]; total++; if(a<16) cleared++; } } return cleared/total; }
+function percentCleared(cv){ const ctx=cv.getContext('2d'); const w=cv.clientWidth, h=cv.clientHeight; const step=8; const img=ctx.getImageData(0,0,w,h).data; let cleared=0,total=0; for(let y=0;y<h;y+=step){ for(let x=0;x<w;x+=step){ const idx=((y*w+x)*4)+3; const a=img[idx]; total++; if(a<16) cleared++; } } return cleared/total; }
 
 function attachScratchHandlers(){
   tickets.forEach((t,i)=>{
@@ -254,17 +240,11 @@ function attachScratchHandlers(){
   });
 }
 
-function disableOtherTickets(winnerIdx){
-  document.querySelectorAll('.ticket').forEach((el,idx)=>{
-    if(idx!==winnerIdx){ el.classList.add('disabled'); el.querySelector('canvas').style.pointerEvents='none'; }
-  });
-}
-
+function disableOtherTickets(winnerIdx){ document.querySelectorAll('.ticket').forEach((el,idx)=>{ if(idx!==winnerIdx){ el.classList.add('disabled'); el.querySelector('canvas').style.pointerEvents='none'; } }); }
 function confettiBurst(){ confetti.innerHTML=''; const n=28; for(let i=0;i<n;i++){ const p=document.createElement('i'); p.style.left=(Math.random()*100)+'vw'; p.style.animationDelay=(Math.random()*0.5)+'s'; p.style.background=Math.random()<.5?'linear-gradient(#80ffea,#4e9cff)':'linear-gradient(#ffd166,#ff3d7f)'; confetti.appendChild(p);} setTimeout(()=>{confetti.innerHTML='';},1800); }
 
 async function onReveal(idx){
   if(CONFIG.allowOnePlayPerDay && alreadyPlayed()) return;
-  // fijar premio según la tarjeta elegida; precargamos 3 labels
   if(!prizeChosen){ prizeChosen = tickets[idx].labelEl.textContent || 'Premio'; }
   disableOtherTickets(idx); document.querySelectorAll('.ticket')[idx].classList.add('won');
   const code = await makeClaimCode(prizeChosen); const ts = tsString();
@@ -276,27 +256,9 @@ async function onReveal(idx){
   confettiBurst(); triesLeftEl.textContent='0'; scratchDisabled=true;
 }
 
-function restoreIfPlayed(){
-  if(!alreadyPlayed()) return;
-  const saved = localStorage.getItem(S_PRIZE); if(saved){ const p=JSON.parse(saved); const code=localStorage.getItem(S_CODE)||'—'; const ts=localStorage.getItem(S_TS)||tsString();
-    badge.textContent=p.label; title.textContent='🎉 ¡Premio obtenido!'; subtitle.innerHTML='Se acredita con tu <b>próxima carga mínima</b>.'; stampEl.textContent=`Código: ${code} · ${ts}`;
-    claimBtn.disabled=false; claimBtn.onclick=()=>location.href=`https://wa.me/${WA}?text=${encodeURIComponent( whatsappText(p.label) )}`;
-    // bloquear raspado
-    document.querySelectorAll('.ticket').forEach(el=>el.classList.add('disabled'));
-    triesLeftEl.textContent='0'; scratchDisabled=true;
-  }
-}
+function restoreIfPlayed(){ if(!alreadyPlayed()) return; const saved = localStorage.getItem(S_PRIZE); if(saved){ const p=JSON.parse(saved); const code=localStorage.getItem(S_CODE)||'—'; const ts=localStorage.getItem(S_TS)||tsString(); badge.textContent=p.label; title.textContent='🎉 ¡Premio obtenido!'; subtitle.innerHTML='Se acredita con tu <b>próxima carga mínima</b>.'; stampEl.textContent=`Código: ${code} · ${ts}`; claimBtn.disabled=false; claimBtn.onclick=()=>location.href=`https://wa.me/${WA}?text=${encodeURIComponent( whatsappText(p.label) )}`; document.querySelectorAll('.ticket').forEach(el=>el.classList.add('disabled')); triesLeftEl.textContent='0'; scratchDisabled=true; } }
 
-/*************** INIT ***************/
-function init(){
-  dailyResetIfNeeded();
-  // Asignar premios visibles en las 3 tarjetas desde la pool (reparto previo)
-  const picks = makeThreeUnique(CONFIG.prizesPool);
-  tickets.forEach((t,i)=>{ t.labelEl.textContent = picks[i].label; });
-  attachScratchHandlers();
-  restoreIfPlayed();
-}
-
+function init(){ dailyResetIfNeeded(); const picks = makeThreeUnique(CONFIG.prizesPool); tickets.forEach((t,i)=>{ t.labelEl.textContent = picks[i].label; }); attachScratchHandlers(); restoreIfPlayed(); }
 init();
 </script>
 </body>

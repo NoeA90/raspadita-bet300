@@ -2,206 +2,523 @@
 <html lang="es">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1" />
-<title>BET300 · Rasca y Gana (Sweet/Joker theme)</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>BET300 · Promo interactiva (Ruleta + Slot)</title>
 <meta name="theme-color" content="#0b0f1e"/>
 <style>
 :root{
-  --bg:#0b0f1e; --panel:#0e1128; --panel2:#0a0d20; --border:#1b1f45;
-  --text:#f7f9ff; --muted:#b7b9d6; --ok:#25D366; --accent:#ff8bd2; --gold:#ffd76a;
+  --bg:#0b0f1e; --panel:#121634; --panel2:#0f1330; --border:#1e2150;
+  --text:#e8ebff; --muted:#b7b9d6; --ok:#25D366; --pointer:#22d3ee;
 }
-*{box-sizing:border-box;margin:0;padding:0}
-body{color:var(--text);background:var(--bg);font:15px/1.42 system-ui,-apple-system,Segoe UI,Roboto}
-
-/* ===== Hero background (temático) ===== */
-.hero{position:relative;isolation:isolate}
-.hero::before{content:"";position:fixed;inset:0;z-index:-2;background:
-  radial-gradient(900px 500px at 50% -10%, rgba(255,215,106,.20), transparent),
-  radial-gradient(700px 350px at 100% 0%, rgba(124,77,255,.16), transparent),
-  var(--bg)}
-.hero::after{content:"";position:fixed;inset:-10% -10% 40% -10%;z-index:-1;background:url('img/theme/sweet-bg.jpg') center/cover no-repeat;opacity:.22;filter:saturate(1.1)}
-
-.container{max-width:920px;margin:10px auto;padding:0 10px 82px}
-.card{background:linear-gradient(180deg, rgba(255, 215, 106, .08), rgba(0,0,0,0)), var(--panel2);border:1px solid var(--border);border-radius:16px;padding:14px}
-
-.head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:10px}
-.left{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.brand{height:28px}
-.pill{background:linear-gradient(90deg,rgba(255,212,96,.18),rgba(124,77,255,.18));border:1px solid var(--border);border-radius:999px;padding:6px 10px;font-size:12px;color:var(--muted)}
+*{box-sizing:border-box} html,body{height:100%}
+body{margin:0;color:var(--text);background:var(--bg);font:16px/1.35 system-ui,-apple-system,Segoe UI,Roboto}
+body::before{content:"";position:fixed;inset:0;z-index:-2;background:
+  radial-gradient(900px 500px at 50% -10%, rgba(101,74,255,.25), transparent),
+  radial-gradient(700px 350px at 100% 0%, rgba(0,209,255,.18), transparent),
+  linear-gradient(180deg,#0b0f1e 0%,#0b0f1e 60%,#0a0d20 100%);
+}
+.container{max-width:980px;margin:14px auto;padding:0 14px 92px}
+.card{background: radial-gradient(120% 100% at 50% 0%, rgba(124,77,255,.08), transparent), var(--panel2);
+  border:1px solid var(--border);border-radius:18px;padding:18px;box-shadow:0 15px 40px rgba(0,0,0,.35)}
+@media(max-width:520px){.container{padding:0 0 92px}.card{border-radius:0;border-left:0;border-right:0;padding:14px}}
+.head{display:flex;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap}
+.brand{height:28px;width:auto;filter:drop-shadow(0 2px 8px rgba(0,0,0,.4))}
+.pill{background:linear-gradient(90deg,rgba(124,77,255,.15),rgba(0,209,255,.15));border:1px solid var(--border);
+  border-radius:999px;padding:6px 10px;font-size:12px;color:var(--muted)}
 .pill.time{display:flex;gap:8px;align-items:center}
-.pill.sound{cursor:pointer}
-.count{display:inline-flex;gap:6px;align-items:center;padding:4px 8px;border-radius:999px;background:rgba(255,204,0,.18);border:1px solid rgba(255,204,0,.35);color:#ffe27a;font-weight:800}
-.head-cta{display:inline-flex;align-items:center;gap:8px;padding:10px 12px;border-radius:12px;font-weight:800;color:#0a0f20;text-decoration:none;background:linear-gradient(90deg,#6c59ff,#00d1ff)}
+.pill.sound{cursor:pointer;user-select:none}
+.count{display:inline-flex;gap:6px;align-items:center;padding:4px 8px;border-radius:999px;background:rgba(255,204,0,.15);
+  border:1px solid rgba(255,204,0,.35);color:#ffe27a;font-weight:700;font-variant-numeric:tabular-nums}
 
-.grid{display:grid;gap:14px;grid-template-columns:1.05fr .95fr}
-@media(max-width:920px){.grid{grid-template-columns:1fr}}
+/* tabs */
+.tabs{display:flex;gap:8px;margin:8px 0}
+.tab{padding:8px 12px;border:1px solid var(--border);border-radius:10px;cursor:pointer;background:var(--panel);color:var(--muted)}
+.tab.active{background:linear-gradient(90deg,#6c59ff,#00d1ff);color:#0b0f1e;font-weight:800}
 
-.panel{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:14px}
+/* layout */
+.grid{display:grid;gap:16px;grid-template-columns:minmax(0,1fr)}
+@media(min-width:900px){.grid{grid-template-columns:1.15fr .85fr}}
 
-/* ===== Raspaditas tipo "Sweet / Joker" ===== */
-.scratch-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:8px}
-@media(max-width:700px){.scratch-grid{grid-template-columns:repeat(2,1fr)}}
+.stage{position:relative;display:flex;align-items:center;justify-content:center}
+.wrap{width:100%;max-width:520px;margin:auto;position:relative}
+canvas{width:100%;height:auto;display:block}
+.pointer{position:absolute;top:6px;left:50%;transform:translateX(-50%);
+  border-left:16px solid transparent;border-right:16px solid transparent;border-bottom:26px solid var(--pointer);z-index:2;
+  filter:drop-shadow(0 4px 10px rgba(34,211,238,.35))}
+@media(max-width:420px){.pointer{border-left:12px solid transparent;border-right:12px solid transparent;border-bottom:22px solid var(--pointer);top:4px}}
 
-.ticket{position:relative;border-radius:16px;overflow:hidden;border:0;isolation:isolate;aspect-ratio:1/1;min-height:150px}
-.ticket .bg{position:absolute;inset:0;background:url('img/theme/leather.jpg') center/cover no-repeat;filter:brightness(.9) saturate(.9)}
-.ticket .icon{position:absolute;inset:0;display:grid;place-items:center;padding:10px;z-index:1}
-.ticket .icon img{max-width:80%;max-height:80%;object-fit:contain;filter:drop-shadow(0 8px 18px rgba(0,0,0,.45))}
-.ticket .badge{position:absolute;left:10px;bottom:10px;z-index:2;background:rgba(255,180,0,.95);color:#111;padding:6px 10px;border-radius:10px;font-weight:900}
-/* capa de raspado */
-.ticket canvas{position:absolute;inset:0;width:100%;height:100%;z-index:3;background:repeating-linear-gradient(45deg,#c4c7cf 0 8px,#b7bac2 8px 16px);box-shadow: inset 0 0 32px rgba(0,0,0,.35);cursor:crosshair;border-radius:16px}
-.ticket.disabled canvas{pointer-events:none;filter:grayscale(1);opacity:.55}
-.ticket.won{outline:3px solid #ffd166}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:16px}
+.center{text-align:center}
+h1,h2,h3,p{margin:0 0 8px} h1{font-size:24px} .muted{color:var(--muted)}
+.stat{display:flex;gap:12px;align-items:center;justify-content:center;margin:8px 0 14px}
+.badge{min-width:72px;height:46px;border-radius:12px;background:radial-gradient(100% 100% at 50% 0%, rgba(0,209,255,.35), rgba(124,77,255,.35));
+  display:grid;place-items:center;font-weight:800;font-size:18px;box-shadow:inset 0 0 10px rgba(124,77,255,.35)}
+.smallline{font-size:12px;color:var(--muted);margin-top:4px}
 
-/* ===== Lateral derecho ===== */
-.right h2{font-size:22px;margin:0 0 6px}
-.right p{margin:0 0 6px;color:var(--muted)}
-.promo{margin-top:10px;padding:12px;border:1px dashed var(--border);border-radius:12px;display:grid;gap:6px}
+/* plataforma */
+.promo{display:grid;grid-template-columns:1fr minmax(200px,260px);align-items:center;gap:12px;margin-top:10px;padding:12px;border:1px dashed var(--border);border-radius:12px}
+.promo.expired{border-color:rgba(255,107,107,.5)}
+.promo .copy{display:grid;gap:4px}
+.promo .eyebrow{padding:2px 8px;border-radius:999px;border:1px solid rgba(255,204,0,.35);background:rgba(255,204,0,.12);color:#ffe27a;font-weight:700;font-size:12px;width:max-content}
+.btn.play{display:inline-flex;gap:10px;align-items:center;justify-content:center;padding:14px 16px;border-radius:12px;font-weight:800;
+  background:linear-gradient(90deg,#ffd166,#ff7ab6);color:#0a0f20;box-shadow:0 8px 20px rgba(0,0,0,.25)}
+@media(max-width:520px){.promo{grid-template-columns:1fr}.btn.play{width:100%}}
 
-/* Modal del premio */
-.modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.6);z-index:100}
-.modal .box{background:linear-gradient(180deg,#101836,#0c102a);border:1px solid #1a214b;border-radius:16px;padding:18px 16px;max-width:420px;width:92%;box-shadow:0 20px 50px rgba(0,0,0,.6)}
-.modal .top{display:flex;align-items:center;gap:10px}
-.modal .prize{font-size:22px;font-weight:900;background:linear-gradient(90deg,#ffd166,#ff7a3d);color:#0b0f1e;padding:4px 10px;border-radius:8px}
-.modal .actions{display:flex;gap:10px;margin-top:12px}
-.modal .actions a{flex:1;text-align:center;padding:12px;border-radius:10px;font-weight:800;text-decoration:none}
-.modal .whatsapp{background:#25D366;color:#0b0f1e}
-.modal .enter{background:linear-gradient(90deg,#6c59ff,#00d1ff);color:#0b0f1e}
-.modal .close{position:absolute;top:10px;right:12px;cursor:pointer}
-
-/* Dock aparece solo tras ganar */
-.dock{position:fixed;left:0;right:0;bottom:0;background:linear-gradient(180deg, rgba(11,15,30,0) 0%, rgba(11,15,30,.85) 22%, rgba(11,15,30,.95) 100%);padding:8px 12px 12px;display:none;gap:10px}
-.btn{appearance:none;border:none;cursor:pointer;padding:12px 14px;border-radius:12px;font-weight:800}
+/* dock */
+.dock{position:fixed;left:0;right:0;bottom:0;z-index:10;background:linear-gradient(180deg, rgba(11,15,30,0) 0%, rgba(11,15,30,.85) 22%, rgba(11,15,30,.95) 100%);
+  padding:10px 16px 14px;display:flex;gap:12px;align-items:center}
+.btn{appearance:none;border:none;cursor:pointer;padding:14px 16px;border-radius:14px;font-weight:800;background:linear-gradient(90deg,#6c59ff,#00d1ff);color:#0a0f20;width:100%;
+  box-shadow:0 8px 20px rgba(0,0,0,.35)}
+.btn:disabled{opacity:.55;cursor:not-allowed}
 .btn.ok{background:#25D366;color:#0b0f1e}
+
+/* Naranja para “Girar” ruleta */
+#spinBtn{ background: linear-gradient(90deg,#FF9A3D,#FF5C39); color:#0b0f1e; }
+#spinBtn:disabled{ background: linear-gradient(90deg,#FFBC82,#FF8C78); }
+
+/* ===== SLOT (nuevo) ===== */
+.slot-wrap{width:100%;max-width:520px;margin:auto}
+.slot-machine{position:relative;background:linear-gradient(180deg,#0e1636,#0c132e);border:1px solid var(--border);border-radius:16px;padding:14px;box-shadow:0 10px 30px rgba(0,0,0,.35)}
+.reels{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;overflow:hidden}
+.reel{height:140px;background:#0b1230;border:1px solid var(--border);border-radius:12px;position:relative;overflow:hidden}
+.reel-strip{position:absolute;left:0;right:0;top:0;will-change:transform}
+.symbol{height:140px;display:grid;place-items:center}
+.symbol img{width:80px;height:auto;filter:drop-shadow(0 6px 14px rgba(0,0,0,.5))}
+.slot-cta{margin-top:12px;display:flex;gap:10px}
+#slotBtn{ background: linear-gradient(90deg,#FF9A3D,#FF5C39); color:#0b0f1e; }
+#slotBtn:disabled{ background: linear-gradient(90deg,#FFBC82,#FF8C78); }
+
+/* confetti */
+.confetti{position:fixed;inset:0;pointer-events:none;z-index:40}
+.confetti i{position:absolute;top:-20px;width:10px;height:14px;border-radius:2px;opacity:0;animation:confFall 1.6s linear forwards}
+@keyframes confFall{8%{opacity:1}100%{transform:translateY(110vh) rotate(360deg);opacity:0}}
 </style>
 </head>
-<body class="hero">
+<body>
+
+<!-- papelitos -->
+<div id="confetti" class="confetti" aria-hidden="true"></div>
+
 <div class="container">
   <div class="card">
     <div class="head">
-      <div class="left">
-        <img class="brand" src="img/logo-bet300.svg" alt="BET300" onerror="this.outerHTML='<strong>BET300</strong>'">
-        <span class="pill">Promo interactiva</span>
-        <span class="pill time">⚡ Tiempo limitado <span class="count" id="countdown">--:--</span></span>
-        <span class="pill sound" id="soundToggle">🔊 Sonido: <b id="soundState">ON</b></span>
-      </div>
-      <a id="playNowTop" class="head-cta" target="_blank" rel="noopener">🎮 Entrar</a>
+      <img class="brand" src="img/logo-bet300.svg" alt="BET300" onerror="this.outerHTML='<strong>BET300</strong>'">
+      <span class="pill">Promo interactiva</span>
+      <span class="pill time">⚡ Tiempo limitado <span class="count" id="countdown">--:--</span></span>
+      <span class="pill sound" id="soundToggle">🔊 Sonido: <b id="soundState">ON</b></span>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <button class="tab active" id="tab-ruleta">Ruleta</button>
+      <button class="tab" id="tab-slot">Slot</button>
     </div>
 
     <div class="grid">
-      <div class="panel">
-        <p>Raspadita temática. Tenés <b id="triesLeft">1</b> intento para elegir una.</p>
-        <div class="scratch-grid" id="scratchGrid">
-          <!-- 6 tarjetas -->
-          <div class="ticket" data-idx="0"><div class="bg"></div><div class="icon"><img src="img/icons/joker.png" alt="joker" onerror="this.style.opacity=.2"></div><div class="badge" id="b0">—</div><canvas id="c0"></canvas></div>
-          <div class="ticket" data-idx="1"><div class="bg"></div><div class="icon"><img src="img/icons/lollipop.png" alt="lollipop" onerror="this.style.opacity=.2"></div><div class="badge" id="b1">—</div><canvas id="c1"></canvas></div>
-          <div class="ticket" data-idx="2"><div class="bg"></div><div class="icon"><img src="img/icons/scatter.png" alt="scatter" onerror="this.style.opacity=.2"></div><div class="badge" id="b2">—</div><canvas id="c2"></canvas></div>
-          <div class="ticket" data-idx="3"><div class="bg"></div><div class="icon"><img src="img/icons/zeus.png" alt="zeus" onerror="this.style.opacity=.2"></div><div class="badge" id="b3">—</div><canvas id="c3"></canvas></div>
-          <div class="ticket" data-idx="4"><div class="bg"></div><div class="icon"><img src="img/icons/elf.png" alt="elf" onerror="this.style.opacity=.2"></div><div class="badge" id="b4">—</div><canvas id="c4"></canvas></div>
-          <div class="ticket" data-idx="5"><div class="bg"></div><div class="icon"><img src="img/icons/bigbass.png" alt="bigbass" onerror="this.style.opacity=.2"></div><div class="badge" id="b5">—</div><canvas id="c5"></canvas></div>
+      <!-- ===== RUleta panel ===== -->
+      <div class="panel" id="panel-ruleta">
+        <div class="stage">
+          <div class="wrap">
+            <canvas id="wheel" width="620" height="620"></canvas>
+            <div class="pointer" aria-hidden="true"></div>
+          </div>
         </div>
       </div>
 
-      <div class="panel right">
-        <h2>Raspadita Ganadora</h2>
-        <p>Los premios se acreditan con tu <b>próxima carga mínima</b>.</p>
-        <div class="promo">
-          <span class="muted" style="font-weight:700">Acceso especial</span>
-          <strong>Tiempo limitado.</strong>
-          <span class="muted">Entrá y participá antes de que termine.</span>
+      <!-- ===== Info derecha ===== -->
+      <div class="panel" id="info-panel">
+        <div class="center">
+          <div class="stat">
+            <div>
+              <div class="badge" id="badge">-</div>
+              <div class="smallline" id="stampLine" aria-live="polite"></div>
+            </div>
+            <div>
+              <h1 id="title">Tenés 1 giro disponible</h1>
+              <p class="muted" id="subtitle">Los premios se acreditan con tu <b>próxima carga mínima</b>.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="promo" id="promoBox">
+          <div class="copy">
+            <span class="eyebrow">Acceso especial</span>
+            <strong>Tiempo limitado.</strong>
+            <span class="muted">Entrá y participá antes de que termine.</span>
+          </div>
+          <a id="playNow" class="btn play" target="_blank" rel="noopener">
+            <span class="icon">🎮</span>
+            <span class="label">Entrar a la plataforma</span>
+          </a>
         </div>
       </div>
+
+      <!-- ===== SLOT panel (nuevo) ===== -->
+      <div class="panel" id="panel-slot" style="display:none">
+        <div class="slot-wrap">
+          <div class="slot-machine">
+            <div class="reels">
+              <div class="reel"><div class="reel-strip" id="reel0"></div></div>
+              <div class="reel"><div class="reel-strip" id="reel1"></div></div>
+              <div class="reel"><div class="reel-strip" id="reel2"></div></div>
+            </div>
+            <div class="slot-cta">
+              <button id="slotBtn" class="btn">🎰 Girar</button>
+              <button id="slotClaim" class="btn ok" disabled>📲 Reclamar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 </div>
 
-<!-- Modal premio -->
-<div id="prizeModal" class="modal">
-  <div class="box">
-    <div class="close" onclick="closeModal()">✖</div>
-    <div class="top"><h3 style="margin:0">🎉 ¡Premio obtenido!</h3> <span id="prizeValue" class="prize"></span></div>
-    <p id="prizeText" style="margin-top:6px" class="muted"></p>
-    <p id="prizeCode" class="muted" style="font-size:12px"></p>
-    <div class="actions">
-      <a id="claimBtn" class="whatsapp" target="_blank">📲 Reclamar</a>
-      <a id="enterBtn" class="enter" target="_blank">🎮 Entrar</a>
-    </div>
-  </div>
+<!-- Dock fijo -->
+<div class="dock">
+  <button id="spinBtn" class="btn">🎯 Girar</button>
+  <button id="claimBtn" class="btn ok" disabled>📲 Reclamar</button>
 </div>
-
-<div id="dock" class="dock"><button id="claimBtnDock" class="btn ok" disabled>📲 Reclamar</button></div>
 
 <script>
-// ===== Assets/tema =====
-// Colocá tus imágenes en /img/theme y /img/icons con los nombres usados arriba
-// Si no tenés leather.jpg o sweet-bg.jpg, dejé degradés de fallback.
+/* ===== Premios ruleta: $ intercalado con % ===== */
+const MONEY_VALUES   = [2000,3000,4000,5000,3000,2000,5000,4000,1000];
+const PERCENT_VALUES = [10,20,30];
+const PRIZES = (()=>{const r=[];const m=Math.max(MONEY_VALUES.length,PERCENT_VALUES.length);
+  for(let i=0;i<m;i++){ if(i<MONEY_VALUES.length)r.push({type:'money',value:MONEY_VALUES[i]});
+    if(i<PERCENT_VALUES.length)r.push({type:'percent',value:PERCENT_VALUES[i]}); } return r; })();
+const COLORS=["#44e0ff","#7a5bff","#16e2b6","#ff6ad5","#ffd166","#4be1a0","#8ab6ff","#ff9bd1","#6ee7ff","#a78bfa","#34d39a","#ffa3e0","#ffe08a","#7ce1b9"];
 
-// ===== Config =====
-const THRESHOLD = 0.55; // porcentaje de raspado
-const ONE_PER_DAY = true; // un intento por día
-const SALT = 'bet300-rasca6-v1';
-const PRIZES = ["$100","$500","$200","$100","10%","20%"]; // labels visibles en cada badge
+/* ===== Slot (símbolos + premios garantizados) ===== */
+const SYMBOLS = [
+  { img:"/img/icons/joker.png",       label:"$500 extra" },
+  { img:"/img/icons/clubs.png",       label:"$200 extra" },
+  { img:"/img/icons/slotmachine.png", label:"10% extra"  },
+]; // agrega más PNG aquí si querés
 
-// WhatsApp/Plataforma por pc
-const WP={principal:"5491157737173",pc1:"5491138601132",pc2:"5491138214312",pc3:"5491166306349"};
-const PL={principal:"https://plataforma.example/inicio",pc1:"https://c01.bet300vip.com/",pc2:"https://c02.bet300vip.com/",pc3:"https://c03.bet300vip.com/"};
+/* WhatsApp / plataforma por pc */
+const WP_NUMBERS={principal:"5491157737173",pc1:"5491138601132",pc2:"5491138214312",pc3:"5491166306349"};
+const PLATFORM_LINKS={principal:"https://plataforma.example/inicio",pc1:"https://c01.bet300vip.com/",pc2:"https://c02.bet300vip.com/",pc3:"https://c03.bet300vip.com/"};
 const params=new URLSearchParams(location.search);const pc=params.get('pc');
-let WA=WP.principal, PLATFORM=PL.principal;
-if(pc==='1'){WA=WP.pc1;PLATFORM=PL.pc1}
-if(pc==='2'){WA=WP.pc2;PLATFORM=PL.pc2}
-if(pc==='3'){WA=WP.pc3;PLATFORM=PL.pc3}
+let WP=WP_NUMBERS.principal, PLATFORM=PLATFORM_LINKS.principal;
+if(pc==='1'){WP=WP_NUMBERS.pc1;PLATFORM=PLATFORM_LINKS.pc1}
+if(pc==='2'){WP=WP_NUMBERS.pc2;PLATFORM=PLATFORM_LINKS.pc2}
+if(pc==='3'){WP=WP_NUMBERS.pc3;PLATFORM=PLATFORM_LINKS.pc3}
+document.getElementById('playNow').href=PLATFORM;
 
-document.getElementById('playNowTop').href = PLATFORM; document.getElementById('enterBtn').href = PLATFORM;
-
-// ===== Countdown =====
-function endOfDay(){ const n=new Date(); return new Date(n.getFullYear(),n.getMonth(),n.getDate(),23,59,0,0).getTime(); }
-function tickCountdown(){ const el=document.getElementById('countdown'); const ms=endOfDay()-Date.now(); const total=Math.max(0,Math.floor(ms/1000)); const h=Math.floor(total/3600), m=Math.floor((total%3600)/60), s=total%60; el.textContent=h>0?`${h}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`:`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`; }
-setInterval(tickCountdown,1000); tickCountdown();
-
-// ===== Storage =====
+/* ===== Antifraude / códigos ===== */
+const SALT = "bet300-promo-v1"; // único para ruleta+slot
+function ensureDeviceId(){
+  let id = localStorage.getItem('device_id');
+  if(!id){ id = (crypto.randomUUID?.() || `${Date.now()}-${Math.random().toString(36).slice(2,8)}`); localStorage.setItem('device_id', id); }
+  return id;
+}
+const DEVICE_ID = ensureDeviceId();
 function todayKey(){const n=new Date();return `${n.getFullYear()}-${String(n.getMonth()+1).padStart(2,'0')}-${String(n.getDate()).padStart(2,'0')}`}
-const S_PLAY='rasca6_done', S_DATE='rasca6_date', S_PRIZE='rasca6_prize', S_CODE='rasca6_code', S_TS='rasca6_ts';
-function dailyResetIfNeeded(){ const today=todayKey(); const d=localStorage.getItem(S_DATE); if(!d){localStorage.setItem(S_DATE,today);} else if(d!==today){ [S_PLAY,S_PRIZE,S_CODE,S_TS].forEach(k=>localStorage.removeItem(k)); localStorage.setItem(S_DATE,today);} }
-function alreadyPlayed(){ return ONE_PER_DAY && localStorage.getItem(S_PLAY)==='1'; }
-
-dailyResetIfNeeded();
-
-// ===== Utils =====
-function tsString(d=new Date()){ const dd=String(d.getDate()).padStart(2,'0'),mm=String(d.getMonth()+1).padStart(2,'0'),yyyy=d.getFullYear(); const hh=String(d.getHours()).padStart(2,'0'),mi=String(d.getMinutes()).padStart(2,'0'); return `${dd}/${mm}/${yyyy} ${hh}:${mi}`; }
-async function sha256hex(msg){ const enc=new TextEncoder().encode(msg); const buf=await crypto.subtle.digest('SHA-256',enc); return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,"0")).join('').toUpperCase(); }
-async function makeClaimCode(prize){ const base=`${todayKey()}|${prize}|pc:${pc||'0'}|${SALT}`; const hex=await sha256hex(base); return hex.slice(0,10); }
-
-// ===== Scratch =====
-const cvs=[c0,c1,c2,c3,c4,c5]; const badges=[b0,b1,b2,b3,b4,b5];
-let chosenPrize=null; let locked=false;
-
-function sizeCanvas(cv){ const holder=cv.parentElement; const w=holder.clientWidth||160; const h=holder.clientHeight||w; const dpr=window.devicePixelRatio||1; cv.width=Math.floor(w*dpr); cv.height=Math.floor(h*dpr); cv.style.width=w+'px'; cv.style.height=h+'px'; const ctx=cv.getContext('2d'); ctx.setTransform(dpr,0,0,dpr,0,0); ctx.globalCompositeOperation='source-over'; ctx.fillStyle='#bfc3cc'; ctx.fillRect(0,0,w,h); }
-function cleared(cv){ const ctx=cv.getContext('2d'); const w=cv.clientWidth, h=cv.clientHeight; const step=10; const data=ctx.getImageData(0,0,w,h).data; let c=0,t=0; for(let y=0;y<h;y+=step){ for(let x=0;x<w;x+=step){ const a=data[((y*w+x)*4)+3]; t++; if(a<16) c++; }} return c/t; }
-
-function attach(cv, idx){ sizeCanvas(cv); const ctx=cv.getContext('2d'); let scratching=false, rect; const draw=(x,y)=>{ ctx.globalCompositeOperation='destination-out'; ctx.beginPath(); ctx.arc(x,y, 24, 0, Math.PI*2); ctx.fill(); };
-  const start=(ev)=>{ if(locked||alreadyPlayed()) return; ev.preventDefault(); rect=cv.getBoundingClientRect(); scratching=true; };
-  const move =(ev)=>{ if(!scratching) return; const e=ev.touches?ev.touches[0]:ev; draw(e.clientX-rect.left, e.clientY-rect.top); };
-  const end  =()=>{ if(!scratching) return; scratching=false; if(cleared(cv)>=THRESHOLD){ onReveal(idx); } };
-  cv.addEventListener('mousedown',start); cv.addEventListener('mousemove',move); window.addEventListener('mouseup',end);
-  cv.addEventListener('touchstart',start,{passive:false}); cv.addEventListener('touchmove',move,{passive:false}); window.addEventListener('touchend',end);
+function tsString(d=new Date()){
+  const dd=String(d.getDate()).padStart(2,'0'),mm=String(d.getMonth()+1).padStart(2,'0'),yyyy=d.getFullYear();
+  const hh=String(d.getHours()).padStart(2,'0'),mi=String(d.getMinutes()).padStart(2,'0');
+  return `${dd}/${mm}/${yyyy} ${hh}:${mi}`;
+}
+async function sha256hex(msg){ const enc=new TextEncoder().encode(msg); const buf=await crypto.subtle.digest("SHA-256", enc); return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,"0")).join(""); }
+async function makeClaimCode(prizeLabel){
+  const base = `${DEVICE_ID}|${todayKey()}|${prizeLabel}|pc:${pc||'0'}|${SALT}`;
+  const hex = await sha256hex(base);
+  return hex.slice(0,10).toUpperCase();
+}
+function whatsappText(prizeLabel){
+  const code = localStorage.getItem('spin_code') || '(SIN-COD)';
+  const ts   = localStorage.getItem('spin_ts')   || tsString();
+  return `Hola, gané ${prizeLabel} en la promo y quiero reclamarlo con mi próxima carga. Código: ${code} · ${ts}`;
 }
 
-async function onReveal(idx){ if(alreadyPlayed()) return; locked=true; document.querySelectorAll('.ticket').forEach((el,i)=>{ if(i!==idx) el.classList.add('disabled'); else el.classList.add('won'); }); chosenPrize = PRIZES[idx]; const code=await makeClaimCode(chosenPrize); const ts=tsString(); localStorage.setItem(S_CODE,code); localStorage.setItem(S_TS,ts); localStorage.setItem(S_PRIZE, JSON.stringify({label:chosenPrize})); localStorage.setItem(S_PLAY,'1');
-  // Modal
-  prizeValue.textContent = chosenPrize; prizeText.innerHTML = 'Se acredita con tu <b>próxima carga mínima</b>.'; prizeCode.textContent=`Código: ${code} · ${ts}`; claimBtn.href=`https://wa.me/${WA}?text=${encodeURIComponent(`Hola, gané ${chosenPrize} en la raspadita. Código: ${code} · ${ts}`)}`; document.getElementById('prizeModal').style.display='flex';
-  // Dock
-  dock.style.display='flex'; claimBtnDock.disabled=false; claimBtnDock.onclick=()=>location.href=`https://wa.me/${WA}?text=${encodeURIComponent(`Hola, gané ${chosenPrize} en la raspadita. Código: ${code} · ${ts}`)}`;
-}
-function closeModal(){ document.getElementById('prizeModal').style.display='none'; }
-
-function restoreIfPlayed(){ if(!alreadyPlayed()) return; const saved=localStorage.getItem(S_PRIZE); if(!saved) return; const p=JSON.parse(saved); chosenPrize=p.label; document.querySelectorAll('.ticket').forEach(el=>el.classList.add('disabled')); dock.style.display='flex'; claimBtnDock.disabled=false; const code=localStorage.getItem(S_CODE)||'—'; const ts=localStorage.getItem(S_TS)||tsString(); claimBtnDock.onclick=()=>location.href=`https://wa.me/${WA}?text=${encodeURIComponent(`Hola, gané ${chosenPrize} en la raspadita. Código: ${code} · ${ts}`)}`; }
-
-// init
-(function init(){
-  // poner badges (labels visibles)
-  badges.forEach((el,i)=> el.textContent = PRIZES[i] );
-  cvs.forEach((cv,i)=> attach(cv,i));
-  restoreIfPlayed();
+/* ===== Audio ===== */
+let soundOn=true;
+const soundToggle=document.getElementById('soundToggle');
+const soundState=document.getElementById('soundState');
+const AudioKit=(()=>{const Ctx=window.AudioContext||window.webkitAudioContext;const ctx=new Ctx();let unlocked=false;
+  function unlock(){ if(!unlocked){ ctx.resume().catch(()=>{}); unlocked=true; } }
+  function click(freq=900,dur=0.04,vol=0.05){
+    const o=ctx.createOscillator(); const g=ctx.createGain();
+    o.type='square'; o.frequency.value=freq; g.gain.value=0; o.connect(g).connect(ctx.destination);
+    const t=ctx.currentTime; g.gain.linearRampToValueAtTime(vol, t+0.005); g.gain.exponentialRampToValueAtTime(0.0001, t+dur);
+    o.start(t); o.stop(t+dur);
+  }
+  function spinStart(){ const id=setInterval(()=>click(860+Math.random()*120,0.035,0.045),110); return ()=>clearInterval(id); }
+  function win(){ [880,1175,1568].forEach((f,i)=>setTimeout(()=>click(f,0.12,0.09), i*130)); }
+  return {unlock,spinStart,win};
 })();
+soundToggle.addEventListener('click',()=>{ soundOn=!soundOn; soundState.textContent=soundOn?'ON':'OFF'; });
+
+/* ===== Confetti ===== */
+const confetti = document.getElementById('confetti');
+function confettiBurst(){
+  confetti.innerHTML='';
+  const n = 28;
+  for(let i=0;i<n;i++){
+    const p=document.createElement('i');
+    p.style.left = (Math.random()*100)+'vw';
+    p.style.animationDelay = (Math.random()*0.5)+'s';
+    p.style.background = Math.random()<.5
+      ? 'linear-gradient(#80ffea,#4e9cff)'
+      : 'linear-gradient(#ffd166,#ff3d7f)';
+    confetti.appendChild(p);
+  }
+  setTimeout(()=>{confetti.innerHTML='';}, 1800);
+}
+
+/* ===== Countdown + persistencia ===== */
+const countdownEl=document.getElementById('countdown'), promoBox=document.getElementById('promoBox');
+function endOfDay(){const n=new Date();const end=new Date(n.getFullYear(),n.getMonth(),n.getDate(),23,59,0,0).getTime();
+  return end>Date.now()?end:new Date(n.getFullYear(),n.getMonth(),n.getDate()+1,23,59,0,0).getTime()}
+function tickCountdown(){
+  const ms=endOfDay()-Date.now(); const total=Math.max(0,Math.floor(ms/1000));
+  const h=Math.floor(total/3600), m=Math.floor((total%3600)/60), s=total%60;
+  countdownEl.textContent=h>0?`${h}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`:`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  if(ms<=0){promoBox.classList.add('expired');disableAllPlay(); document.getElementById('title').textContent="⏱️ Oferta finalizada";
+    document.getElementById('subtitle').innerHTML="Los giros promocionales se habilitan en la próxima ventana.";}
+}
+setInterval(tickCountdown,1000);
+
+function disableAllPlay(){ spinBtn.disabled=true; slotBtn.disabled=true; }
+
+/* ===== Tabs ===== */
+const tabRuleta=document.getElementById('tab-ruleta');
+const tabSlot=document.getElementById('tab-slot');
+const panelRuleta=document.getElementById('panel-ruleta');
+const panelSlot=document.getElementById('panel-slot');
+tabRuleta.onclick=()=>{ tabRuleta.classList.add('active'); tabSlot.classList.remove('active'); panelRuleta.style.display='block'; panelSlot.style.display='none'; };
+tabSlot.onclick=()=>{ tabSlot.classList.add('active'); tabRuleta.classList.remove('active'); panelRuleta.style.display='none'; panelSlot.style.display='block'; };
+
+/* ===== RUleta ===== */
+const wheel=document.getElementById('wheel'), ctx=wheel.getContext('2d');
+const spinBtn=document.getElementById('spinBtn'), claimBtn=document.getElementById('claimBtn');
+const badge=document.getElementById('badge'), title=document.getElementById('title'), subtitle=document.getElementById('subtitle');
+const stampEl = document.getElementById('stampLine');
+
+let angle=0, spinning=false, cx,cy,r, cssW=0;
+const money=n=>"$"+n.toLocaleString("es-AR");
+const label=p=>p.type==='money'?money(p.value):(`${p.value}%`);
+const subtitleHTML=p=>p.type==='money'
+  ? `Recibís <b>${money(p.value)} extra</b> con tu próxima carga.`
+  : `Recibís un <b>${p.value}% extra</b> con tu próxima carga.`;
+
+function getWrapWidth(){return Math.floor(document.querySelector('.wrap').getBoundingClientRect().width)}
+function setSize(){
+  const dpr=window.devicePixelRatio||1;
+  const w=Math.min(520,Math.max(280,getWrapWidth()));
+  cssW=w; wheel.width=Math.floor(w*dpr); wheel.height=Math.floor(w*dpr);
+  wheel.style.width=w+'px'; wheel.style.height=w+'px'; ctx.setTransform(dpr,0,0,dpr,0,0);
+  cx=wheel.width/dpr/2; cy=wheel.height/dpr/2; r=Math.min(cx,cy)-10;
+}
+addEventListener('resize',()=>{clearTimeout(window.__wTo);window.__wTo=setTimeout(()=>{setSize()},120)})
+
+function draw(a){
+  ctx.clearRect(0,0,wheel.width,wheel.height);
+  const n=PRIZES.length, arc=Math.PI*2/n;
+  const font= cssW<=340?"700 20px system-ui,-apple-system,Segoe UI":
+               cssW<=380?"700 24px system-ui,-apple-system,Segoe UI":
+               cssW<=440?"700 28px system-ui,-apple-system,Segoe UI":"700 32px system-ui,-apple-system,Segoe UI";
+  for(let i=0;i<n;i++){
+    const s=a+i*arc, e=s+arc;
+    ctx.beginPath();ctx.moveTo(cx,cy);ctx.arc(cx,cy,r,s,e);ctx.closePath();
+    ctx.fillStyle=COLORS[i%COLORS.length];ctx.fill();
+    ctx.strokeStyle="rgba(10,15,35,.35)";ctx.lineWidth=2;ctx.stroke();
+    const txt=label(PRIZES[i]);
+    ctx.save();ctx.translate(cx,cy);ctx.rotate(s+arc/2);
+    ctx.textAlign="right";ctx.fillStyle="#091024";ctx.font=font;
+    ctx.fillText(txt,r-18,10);ctx.restore();
+  }
+  ctx.beginPath();ctx.lineWidth=Math.max(8,r*0.04);ctx.strokeStyle="#424864";ctx.arc(cx,cy,r*1.02,0,Math.PI*2);ctx.stroke();
+  const bulbs=54, rr=r*1.02, t=Date.now()/130;
+  for(let i=0;i<bulbs;i++){
+    const ang=i/bulbs*Math.PI*2; const x=cx+Math.cos(ang)*rr; const y=cy+Math.sin(ang)*rr;
+    const on=(Math.floor(t)%bulbs)===i;
+    ctx.beginPath();ctx.fillStyle=on?"rgba(220,235,255,1)":"rgba(220,235,255,.55)";
+    ctx.arc(x,y,Math.max(3,r*0.03),0,Math.PI*2);ctx.fill();
+  }
+  const rCenter=cssW<=360?Math.max(26,r*.085):cssW<=420?Math.max(30,r*.095):Math.max(34,r*.105);
+  ctx.beginPath();ctx.arc(cx,cy,rCenter,0,Math.PI*2);ctx.fillStyle="#0e1230";ctx.fill();
+  ctx.strokeStyle="rgba(124,77,255,.6)";ctx.lineWidth=Math.max(2,rCenter*.08);ctx.stroke();
+}
+(function glow(){ draw(angle); requestAnimationFrame(glow); })();
+
+function normAngle(rad){ const T = Math.PI * 2; return ((rad % T) + T) % T; }
+function winnerIndexByAngle(a){
+  const n = PRIZES.length; const arc = (Math.PI * 2) / n; const pointer = Math.PI * 1.5;
+  const rel = normAngle(pointer - a); return Math.floor(rel / arc) % n;
+}
+function animateTo(target,ms,cb){
+  const start=performance.now(),from=angle;
+  (function loop(t){
+    const k=Math.min(1,(t-start)/ms),ease=1-Math.pow(1-k,3);
+    angle=from+(target-from)*ease;
+    if(k<1){requestAnimationFrame(loop)}else{cb&&cb()}
+  })(start);
+}
+
+/* persistencia ruleta */
+function restoreDaily(){
+  const today=todayKey(); const stored=localStorage.getItem('spin_date');
+  if(stored && stored!==today){
+    ["spin_done","spin_prize","spin_code","spin_ts"].forEach(k=>localStorage.removeItem(k));
+    localStorage.setItem('spin_date',today);
+    ["slot_done","slot_prize","slot_code","slot_ts"].forEach(k=>localStorage.removeItem(k)); // reset slot también
+  } else if(!stored){ localStorage.setItem('spin_date',today) }
+}
+function restorePrizeIfAny(){
+  const done=localStorage.getItem('spin_done')==='1'; const saved=localStorage.getItem('spin_prize');
+  if(done && saved){
+    const p=JSON.parse(saved);
+    const code = localStorage.getItem('spin_code') || '—';
+    const ts   = localStorage.getItem('spin_ts')   || tsString();
+    badge.textContent=(p.type==='money'?"$"+p.value.toLocaleString("es-AR"):p.value+"%");
+    title.textContent="🎉 ¡Premio obtenido!";
+    subtitle.innerHTML=(p.type==='money'?`Recibís <b>$${p.value.toLocaleString("es-AR")} extra</b> con tu próxima carga.`:`Recibís un <b>${p.value}% extra</b> con tu próxima carga.`);
+    stampEl.textContent = `Código: ${code} · ${ts}`;
+    claimBtn.disabled=false; spinBtn.disabled=true; slotBtn.disabled=true;
+    const msg=whatsappText(badge.textContent);
+    claimBtn.onclick=()=>location.href=`https://wa.me/${WP}?text=${encodeURIComponent(msg)}`;
+  }
+}
+
+/* spin ruleta */
+let stopTicks=null;
+document.addEventListener('click',()=>AudioKit.unlock(),{once:true});
+spinBtn.addEventListener('click', async ()=>{
+  if(spinning) return;
+  if(localStorage.getItem('spin_done')==='1' || localStorage.getItem('slot_done')==='1'){ alert("Ya usaste tu chance de hoy"); return; }
+
+  spinning=true; spinBtn.disabled=true; slotBtn.disabled=true;
+  AudioKit.unlock(); if(soundOn){ stopTicks = AudioKit.spinStart(); }
+
+  const extra=5+Math.random()*1.5, offset=Math.random()*Math.PI*2, final=angle+(Math.PI*2*extra)+offset;
+
+  animateTo(final, 3000, async ()=>{
+    angle=final;
+    const idx=winnerIndexByAngle(angle); const prize=PRIZES[idx];
+    const prizeLabel = prize.type==='money'?"$"+prize.value.toLocaleString("es-AR"):(`${prize.value}%`);
+
+    const code = await makeClaimCode(prizeLabel);
+    const ts   = tsString(new Date());
+    localStorage.setItem('spin_code', code);
+    localStorage.setItem('spin_ts', ts);
+
+    badge.textContent=prizeLabel;
+    title.textContent="🎉 ¡Premio obtenido!";
+    subtitle.innerHTML=(prize.type==='money'?`Recibís <b>$${prize.value.toLocaleString("es-AR")} extra</b> con tu próxima carga.`:`Recibís un <b>${prize.value}% extra</b> con tu próxima carga.`);
+    stampEl.textContent = `Código: ${code} · ${ts}`;
+
+    const msg = whatsappText(prizeLabel);
+    claimBtn.disabled=false;
+    claimBtn.onclick=()=>location.href=`https://wa.me/${WP}?text=${encodeURIComponent(msg)}`;
+
+    localStorage.setItem('spin_done','1');
+    localStorage.setItem('spin_prize',JSON.stringify(prize));
+    localStorage.setItem('spin_date',todayKey());
+
+    if(soundOn){ if(stopTicks) stopTicks(); AudioKit.win(); }
+    confettiBurst();
+    spinning=false;
+  });
+});
+
+/* ===== SLOT ===== */
+const reelEls=[document.getElementById('reel0'),document.getElementById('reel1'),document.getElementById('reel2')];
+const slotBtn=document.getElementById('slotBtn'), slotClaim=document.getElementById('slotClaim');
+
+function buildReels(){
+  reelEls.forEach(reel=>{
+    reel.innerHTML='';
+    // duplico símbolos para efecto continuo
+    const strip = document.createElement('div');
+    SYMBOLS.concat(SYMBOLS).forEach(sym=>{
+      const s=document.createElement('div'); s.className='symbol';
+      s.innerHTML=`<img src="${sym.img}" alt="">`;
+      strip.appendChild(s);
+    });
+    reel.appendChild(strip);
+  });
+}
+buildReels();
+
+function spinReel(reelIdx, rounds, stopAtIndex, duration=1400){
+  const strip=reelEls[reelIdx].firstElementChild; // .reel-strip
+  const symH=140; const total=SYMBOLS.length*2; // duplicado
+  const start = performance.now();
+  return new Promise(res=>{
+    (function loop(t){
+      const k=Math.min(1,(t-start)/duration);
+      const ease=1-Math.pow(1-k,3);
+      const offset = (rounds*total + stopAtIndex) * symH * ease;
+      strip.style.transform=`translateY(${-offset}px)`;
+      if(k<1){ requestAnimationFrame(loop); } else { res(); }
+    })(start);
+  });
+}
+
+function pickPrizeFromResult(indexes){
+  // premio garantizado: toma el símbolo del 2° carrete
+  const sym = SYMBOLS[indexes[1] % SYMBOLS.length];
+  return sym.label;
+}
+
+slotBtn.addEventListener('click', async ()=>{
+  if(localStorage.getItem('spin_done')==='1' || localStorage.getItem('slot_done')==='1'){ alert("Ya usaste tu chance de hoy"); return; }
+  slotBtn.disabled=true; spinBtn.disabled=true;
+
+  // elegimos stops
+  const stops = [0,1,2].map(()=> Math.floor(Math.random()*SYMBOLS.length));
+  await spinReel(0, 4+Math.floor(Math.random()*2), stops[0], 1200);
+  await spinReel(1, 5+Math.floor(Math.random()*2), stops[1], 1400);
+  await spinReel(2, 6+Math.floor(Math.random()*2), stops[2], 1600);
+
+  const prizeLabel = pickPrizeFromResult(stops);
+  const code = await makeClaimCode(prizeLabel);
+  const ts   = tsString(new Date());
+
+  localStorage.setItem('spin_code', code);
+  localStorage.setItem('spin_ts', ts);
+  localStorage.setItem('slot_done','1');
+  localStorage.setItem('slot_prize', JSON.stringify({label:prizeLabel}));
+
+  // pinta UI (panel derecho)
+  badge.textContent=prizeLabel;
+  title.textContent="🎉 ¡Premio obtenido!";
+  subtitle.innerHTML="Se acredita con tu <b>próxima carga mínima</b>.";
+  stampEl.textContent = `Código: ${code} · ${ts}`;
+
+  // acciones
+  const msg = whatsappText(prizeLabel);
+  slotClaim.disabled=false; slotClaim.onclick=()=>location.href=`https://wa.me/${WP}?text=${encodeURIComponent(msg)}`;
+  claimBtn.disabled=false; claimBtn.onclick=()=>location.href=`https://wa.me/${WP}?text=${encodeURIComponent(msg)}`;
+
+  confettiBurst(); AudioKit.win();
+});
+
+function restoreSlotIfAny(){
+  const done=localStorage.getItem('slot_done')==='1';
+  if(!done) return;
+  const saved=localStorage.getItem('slot_prize'); if(!saved) return;
+  const p=JSON.parse(saved);
+  const code = localStorage.getItem('spin_code') || '—';
+  const ts   = localStorage.getItem('spin_ts')   || tsString();
+
+  badge.textContent=p.label;
+  title.textContent="🎉 ¡Premio obtenido!";
+  subtitle.innerHTML="Se acredita con tu <b>próxima carga mínima</b>.";
+  stampEl.textContent = `Código: ${code} · ${ts}`;
+  slotBtn.disabled=true; spinBtn.disabled=true;
+  const msg=whatsappText(p.label);
+  slotClaim.disabled=false; slotClaim.onclick=()=>location.href=`https://wa.me/${WP}?text=${encodeURIComponent(msg)}`;
+  claimBtn.disabled=false; claimBtn.onclick=()=>location.href=`https://wa.me/${WP}?text=${encodeURIComponent(msg)}`;
+}
+
+/* ===== Init ===== */
+function init(){
+  setSize(); restoreDaily(); restorePrizeIfAny(); restoreSlotIfAny(); tickCountdown();
+}
+init();
 </script>
 </body>
 </html>
